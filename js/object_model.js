@@ -7,39 +7,37 @@
 /********** Board Object Model **********/
 /**
  * Board
- * parameters: int rows, int cols
- * returns board
+ * This should have functions to draw, and init.
  * **/
-function Board( rows, cols ){}
-Board.prototype.newBoard = function () {}
+var Board = {
+	function draw( rows, cols ){}
+}
 
 /********** Square Object Model **********/
 /**
  * Square
- * parameters: int block
- * returns: the elements for the square to draw 
+ * This should have functions to get and set what's in the square, and a draw function
  * **/
-function Square( block ) {
+var Square = {
 	//square can be either blank, cheese, rock, etc...
 }
-Square.prototype.newSquare() {}
 
-/********** Character Object Model **********/
+/********** Moveable Object Model **********/
 /**
- * Character
- * parameters: int being
- * returns: a moving object
+ * Moveable
+ * This is a special square class that will draw and enable a moveable object
+ * This needs functions to get the type of moveable, create the movement, and handle collision
  * **/
-function Character( being ) {
-	//character can be either mouse, cat, yarn, etc...
+var Moveable = {
+//character can be either mouse, cat, yarn, etc...
 }
-Character.prototype.newCharacter() {}
 
 /********** Game Object Model **********/
 /**
- * Game 
- * parameters: none
- * returns: a game
+ * Game
+ * This needs funtions to start the game. It will probably create a board object.
  * **/
+var Game = {
+}
+
 function Game() {}
-Game.prototype.newGame() {}
