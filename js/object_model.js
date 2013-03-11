@@ -35,9 +35,32 @@ var Moveable = {
 /********** Game Object Model **********/
 /**
  * Game
- * This needs funtions to start the game. It will probably create a board object.
+ * This needs functions to start the game. It will probably create a board object.
  * **/
 var Game = {
 }
 
-function Game() {}
+function Game() {
+	// function here to initialize game for first time run
+	
+	// draw board
+	var board = new Board();
+	
+	// need timer function
+		// timer will need internal functions to
+			// regular screen refreshes (once a second?)
+			// spawn cats
+			// spawn yarn balls
+			// kill rodent (when allotted time expires)
+			// reset
+
+		
+	// draw timer	
+	// draw score
+	// draw number of lives
+	
+	// need update score function
+	// need number of lives update function
+}
+
+
