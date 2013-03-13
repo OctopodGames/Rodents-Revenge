@@ -38,9 +38,7 @@ var Moveable = {
  * This needs functions to start the game. It will probably create a board object.
  * **/
 var Game = {
-}
 
-function Game() {
 	// function here to initialize game for first time run
 	
 	// draw board
