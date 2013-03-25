@@ -1,0 +1,11 @@
+var mouse = {};
+
+mouse.init = function() {
+	mouse.symbol = '&#9765;';
+	mouse.type = 'player';
+	mouse.x = 5;
+	mouse.y = 5;
+
+	board.place( mouse );
+};
+
