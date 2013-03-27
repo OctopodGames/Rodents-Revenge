@@ -5,6 +5,7 @@ cat.init = function() {
 	cat.type = 'cat';
 	cat.x = 1;
 	cat.y = 1;
+	cat.timer=null;
 
 	board.place( cat );
 
@@ -14,7 +15,7 @@ cat.init = function() {
 
 cat.go = function() {
 
-	setInterval( cat.move, 500 );
+	cat.timer = setInterval( cat.move, 500 );
 
 };
 
