@@ -1,4 +1,5 @@
 var game = {};
+var game.level = {};
 
 game.handleKey = function( e ) {
 	switch ( e.keyCode ) {
@@ -121,7 +122,22 @@ game.end = function() {
 	clearInterval( cat.timer ); 
 	alert( "Loser!");
 }
-
+game.readLevel = function( number ) {
+	this.level = $.request('level'+number+'.json');
+	//delegate the parameters to the proper objects
+	//grid size
+	//mouse placement
+	//cats number = len(cats)
+	//cat position
+	//blocks number = len(blocks)
+	//block position
+	//rocks number = len(rocks)
+	//rock position
+	//traps number = len(traps)
+	//trap position
+	//holes number = len(holes)
+	//hole position 
+}
 
 /* Global variables we might need */
 var key = {
