@@ -5,6 +5,7 @@ mouse.init = function() {
 	mouse.type = 'player';
 	mouse.x = 5;
 	mouse.y = 5;
+	mouse.lives = 3;
 
 	board.place( mouse );
 };

@@ -5,83 +5,122 @@ game.handleKey = function( e ) {
 		case key.left:
 		case key.a:
 			game.move( mouse, 'left' );
-		break;
+			break;
 
 		case key.up:
 		case key.w:
 			game.move( mouse, 'up' );
-		break;
+			break;
 
 		case key.right:
 		case key.d:
 			game.move( mouse, 'right' );
-		break;
+			break;
 
 		case key.down:
 		case key.s:
 			game.move( mouse, 'down' );
-		break;
+			break;
 	}
 
 }
 
 game.move = function( who, direction ) {
+	if(mouse.lives >0){
+		var keep_x = who.x;
+		var keep_y = who.y;
 
-	var keep_x = who.x;
-	var keep_y = who.y;
-
-	switch ( direction ) {
-		case 'left':
+		switch ( direction ) {
+			case 'left':
 			//go left
 			if ( 0 == who.x ) {
-				// dont move...
+				// dont move...hit an edge
+				return false;
+			} else if( board.squares[who.x-1][who.y] !== null ) {
+				// dont move...collision
+				this.collide(who.x-1,who.y);
 				return false;
 			}
 
 			who.x--;
-		break;
+			break;
 
-		case 'up':
+			case 'up':
 			//go up
-			if ( (board.rows - 1) == who.y ) {
-				// dont move...
+			if (  (board.rows - 1) == who.y ) {
+				// dont move...hit an edge
+				return false;
+			} else if( board.squares[who.x][who.y+1] !== null ) {
+				// dont move...collision
+				this.collide(who.x,who.y+1);
 				return false;
 			}
 
 			who.y++;
-		break;
+			break;
 
-		case 'right':
+			case 'right':
 			//go left
 			if ( (board.columns - 1) == who.x ) {
-				// dont move...
+				// dont move...hit an edge
+				return false;
+			} else if( board.squares[who.x+1][who.y] !== null ) {
+				// dont move...collision
+				this.collide(who.x+1,who.y);
 				return false;
 			}
 
 			who.x++;
-		break;
+			break;
 
-		case 'down':
+			case 'down':
 			//go left
 			if ( 0 == who.y ) {
-				// dont move...
+				// dont move...hit an edge
+				return false;
+			} else if( board.squares[who.x][who.y-1] !== null ) {
+				// dont move...collision
+				this.collide(who.x,who.y-1);
 				return false;
 			}
 
 			who.y--;
-		break;
-	}
+			break;
+		}
 
-	board.remove( keep_x, keep_y );
-	board.place( who );
+		board.remove( keep_x, keep_y );
+		board.place( who );
+	}	
 };
 
 game.start = function() {
-	board.drawGrid( 10, 10 );
+	game.cats = new Array;
+	game.yarns = new Array;
+	board.init( 10, 10 );
 	mouse.init();
 	cat.init();
 	$(document).keydown( game.handleKey );
 };
+
+game.collide = function( x, y ) {
+	alert( board.squares[x][y] );
+	mouse.lives--;
+	if( mouse.lives <= 0 ) {
+		this.end();		
+	}else{
+		board.remove( mouse.x, mouse.y );
+		//move mouse to center of board for now - pending test for "safe zone"
+		mouse.x = 5;
+		mouse.y = 5;
+		board.place( mouse );
+	}
+}
+
+game.end = function() {
+	//stops cats moving after game ends - we'll need one for yarn too!
+	clearInterval( cat.timer ); 
+	alert( "Loser!");
+}
 
 
 /* Global variables we might need */
