@@ -96,9 +96,24 @@ game.move = function( who, direction ) {
 game.start = function() {
 	game.cats = new Array;
 	game.yarns = new Array;
+	game.blocks = new Array;
+	game.rocks = new Array;
+	game.traps = new Array;
+	game.holes = new Array;
 	board.init( 10, 10 );
 	mouse.init();
-	cat.init();
+	// @TODO: foreach file.cats...
+	game.cats.push( cat.init(1,1) );
+	// @TODO: same for yarn...
+	game.yarns.push( yarn.init(7,7) );
+	// @TODO: foreach file.cats...
+	game.blocks.push( block.init(3,3) );
+	// @TODO: foreach file.cats...
+	game.rocks.push( rock.init(8,8) );
+	// @TODO: foreach file.cats...
+	game.traps.push( trap.init(6,6) );
+	// @TODO: foreach file.cats...
+	game.holes.push( sinkhole.init(4,4) );
 	$(document).keydown( game.handleKey );
 };
 
@@ -117,8 +132,9 @@ game.collide = function( x, y ) {
 }
 
 game.end = function() {
-	//stops cats moving after game ends - we'll need one for yarn too!
-	clearInterval( cat.timer ); 
+	/* stops cats moving after game ends - we'll need one for yarn too!
+	// @TODO: should be a foreach..but we're not there yet */
+	cats.forEach( clearInterval( this.timer ) ); 
 	alert( "Loser!");
 }
 

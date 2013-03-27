@@ -1,10 +1,11 @@
 var cat = {};
 
-cat.init = function() {
+cat.init = function(x, y) {
+	cat.x = x;
+	cat.y = y;
 	cat.symbol = '&#9773;';
 	cat.type = 'cat';
-	cat.x = 1;
-	cat.y = 1;
+	cat.movable = true;
 	cat.timer=null;
 
 	board.place( cat );
