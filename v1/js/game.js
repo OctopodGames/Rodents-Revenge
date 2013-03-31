@@ -26,7 +26,7 @@ game.handleKey = function( e ) {
 }
 
 game.move = function( who, direction ) {
-	if(mouse.lives >0){
+	if(mouse.lives > 0){
 		var keep_x = who.x;
 		var keep_y = who.y;
 
@@ -37,9 +37,10 @@ game.move = function( who, direction ) {
 				// dont move...hit an edge
 				return false;
 			} else if( board.squares[who.x-1][who.y] !== null ) {
-				// dont move...collision
-				this.collide(who.x-1,who.y);
-				return false;
+				// collision...decide result
+				if(this.collide(who, who.x-1, who.y)) {
+					return false;
+				}
 			}
 
 			who.x--;
@@ -51,9 +52,10 @@ game.move = function( who, direction ) {
 				// dont move...hit an edge
 				return false;
 			} else if( board.squares[who.x][who.y+1] !== null ) {
-				// dont move...collision
-				this.collide(who.x,who.y+1);
-				return false;
+				// collision...decide result
+				if(this.collide(who, who.x, who.y+1)) {
+					return false;
+				}
 			}
 
 			who.y++;
@@ -65,9 +67,10 @@ game.move = function( who, direction ) {
 				// dont move...hit an edge
 				return false;
 			} else if( board.squares[who.x+1][who.y] !== null ) {
-				// dont move...collision
-				this.collide(who.x+1,who.y);
-				return false;
+				// collision...decide result
+				if(this.collide(who, who.x+1, who.y)) {
+					return false;
+				}
 			}
 
 			who.x++;
@@ -79,9 +82,10 @@ game.move = function( who, direction ) {
 				// dont move...hit an edge
 				return false;
 			} else if( board.squares[who.x][who.y-1] !== null ) {
-				// dont move...collision
-				this.collide(who.x,who.y-1);
-				return false;
+				// collision...decide result
+				if(this.collide(who, who.x, who.y-1)) {
+					return false;
+				}
 			}
 
 			who.y--;
@@ -103,9 +107,9 @@ game.start = function() {
 	board.init( 10, 10 );
 	mouse.init();
 	// @TODO: foreach file.cats...
-	game.cats.push( cat.init(1,1) );
+	game.cats.push( cat.init(1,7) );
 	// @TODO: same for yarn...
-	game.yarns.push( yarn.init(7,7) );
+	game.yarns.push( yarn.init(8,7) );
 	// @TODO: foreach file.cats...
 	game.blocks.push( block.init(3,3) );
 	// @TODO: foreach file.cats...
@@ -117,18 +121,44 @@ game.start = function() {
 	$(document).keydown( game.handleKey );
 };
 
-game.collide = function( x, y ) {
-	alert( board.squares[x][y] );
-	mouse.lives--;
-	if( mouse.lives <= 0 ) {
-		this.end();		
-	}else{
-		board.remove( mouse.x, mouse.y );
-		//move mouse to center of board for now - pending test for "safe zone"
-		mouse.x = 5;
-		mouse.y = 5;
-		board.place( mouse );
+game.collide = function( movedObj, x, y ) {
+
+	// @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
+	if(movedObj.type === 'player') {
+		alert( movedObj.type + ' collided with ' + board.squares[x][y] );
+		switch ( board.squares[x][y] ) {
+			case 'cat':
+			case 'yarn':
+			case 'trap':
+			case 'sinkhole':
+				mouse.die();
+				return true;   //don't execute move, next mouse re-appeared in safe zone.
+			break;
+
+			case 'block':
+				// do move stuff
+				return false;
+			break;
+
+			case 'rock':
+				return true;
+			break;
+		}
+
 	}
+
+	// if a cat or yarnball hits the mouse, it dies. Those are the only other movable objects
+	if(board.squares[x][y] === 'player' ) {
+		alert( movedObj.type + ' collided with ' + board.squares[x][y] );
+		mouse.die();
+		return false;  // no collision - mouse died, OK to move
+	} else {
+		// cat or yarn bounced into something else
+		return true;
+	}
+	
+
+
 }
 
 game.end = function() {
