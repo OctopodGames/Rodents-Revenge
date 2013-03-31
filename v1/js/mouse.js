@@ -5,8 +5,9 @@ mouse.init = function() {
 	mouse.type = 'player';
 	mouse.movable = true;
 	mouse.x = 5;
-	mouse.y = 5;
+	mouse.y = 3;
 	mouse.lives = 3;
+	mouse.direction = '';
 
 	board.place( mouse );
 };
