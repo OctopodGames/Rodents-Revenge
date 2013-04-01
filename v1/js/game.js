@@ -1,5 +1,5 @@
 var game = {};
-var game.level = {};
+//var game.level = {};
 
 game.handleKey = function( e ) {
 	switch ( e.keyCode ) {
@@ -60,13 +60,14 @@ game.move = function( who, direction ) {
 
 
 game.start = function() {
-	game.cats = new Array;
+	/*game.cats = new Array;
 	game.yarns = new Array;
 	game.blocks = new Array;
 	game.rocks = new Array;
 	game.traps = new Array;
 	game.holes = new Array;
 	board.init( 10, 10 );
+	
 	mouse.init();
 	// @TODO: none of these are being updated when an object vanishes
 	// @TODO: foreach file.cats...
@@ -83,7 +84,8 @@ game.start = function() {
 	game.traps.push( trap.init(6,6) );
 	// @TODO: foreach file.sinkhole...
 	//game.holes.push( sinkhole.init(2,3) );
-	game.holes.push( sinkhole.init(4,4) );
+	game.holes.push( sinkhole.init(4,4) );*/
+	game.readLevel( 0 );
 	$(document).keydown( game.handleKey );
 };
 
@@ -193,20 +195,55 @@ game.end = function() {
 	alert( "Loser!");
 }
 game.readLevel = function( number ) {
-	this.level = $.request('level'+number+'.json');
-	//delegate the parameters to the proper objects
-	//grid size
-	//mouse placement
-	//cats number = len(cats)
+	//get the requested level file
+	level = $.get('level'+number+'.json');
+	
+	//set the grid size
+	game.gridSize = board.init( level.board[0][0], level.board[0][1] );
+	
+	//set the mouse starting place
+	game.mouse.init(level.mouse[0][0], level.mouse[1][1]);
+	
+	//create the array of cats
+	game.cats = [];
+	
 	//cat position
-	//blocks number = len(blocks)
+	for( kitty in level.cats ){
+		game.cats.append( cat.init( kitty[0], kitty[1] ) );
+	}
+	
+	//create the array of blocks
+	game.blocks = []
+	
 	//block position
-	//rocks number = len(rocks)
+	for( lego in level.blocks ){
+		game.blocks.append( block.init( lego[0], lego[1] ) );
+	}
+	
+	//create the array of rocks
+	game.rocks = []
+	
 	//rock position
-	//traps number = len(traps)
+	for( pebble in level.rocks ){
+		game.rocks.append( rock.init( pebble[0], pebble[1] ) );
+	}
+	
+	//create the traps array
+	game.traps = [];
+	
 	//trap position
-	//holes number = len(holes)
+	for( akbar in level.traps ){
+		//it's a trap!
+		game.traps.append( trap.init( akbar[0], akbar[1] ) ); 
+	}
+	
+	//create array of holes
+	game.sinkholes = [];
+	
 	//hole position 
+	for( hole in level.holes ){
+		game.sinkholes.append( sinkhole.init( hole[0], hole[1] ) );
+	}
 }
 
 /* Global variables we might need */
