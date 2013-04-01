@@ -4,6 +4,7 @@
  * The different object models for rodents revenge
  * Objects: Board, Square, Player, Game
  **/
+
 /********** Board Object Model **********/
 /**
  * Board
