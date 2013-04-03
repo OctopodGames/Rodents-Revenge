@@ -1,6 +1,9 @@
 var game = {};
 
 game.handleKey = function( e ) {
+	if(mouse.movable == false){
+		return;
+	}
 	switch ( e.keyCode ) {
 		case key.left:
 		case key.a:
@@ -71,7 +74,7 @@ game.start = function() {
 	// @TODO: foreach file.cats...
 	game.cats.push( cat.init(1,1) );
 	// @TODO: same for yarn...
-	game.yarns.push( yarn.init(8,7) );
+	game.yarns.push( yarn.init(5,7) );
 	// @TODO: foreach file.block...
 	game.blocks.push( block.init(3,3) );
 	game.blocks.push( block.init(4,3) );
@@ -92,9 +95,16 @@ game.collide = function( movedObj, x, y ) {
 		switch ( board.squares[x][y] ) {
 			case 'cat':
 			case 'yarn':
-			case 'trap':
-			case 'sinkhole':
 				mouse.die();
+				return true;   //don't execute move, next mouse re-appeared in safe zone.
+			break;
+			case 'sinkhole':
+				mouse.stuck( x, y );  //Mouse is stuck for ten cat turns
+				return false;  
+			break;
+			case 'trap':
+				mouse.die();
+				board.remove( x, y );   //remove trap from board
 				return true;   //don't execute move, next mouse re-appeared in safe zone.
 			break;
 
