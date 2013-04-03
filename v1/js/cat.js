@@ -1,11 +1,10 @@
 var cat = {};
 
-cat.init = function(x, y) {
-	cat.x = x;
-	cat.y = y;
+cat.init = function() {
 	cat.symbol = '&#9773;';
 	cat.type = 'cat';
-	cat.movable = true;
+	cat.x = 0;
+	cat.y = 0;
 	cat.timer=null;
 
 	board.place( cat );
@@ -20,7 +19,40 @@ cat.go = function() {
 
 };
 
-// @TODO: chris - please make the cat smarter.  (Zach D... you could help too)
+// @TODO: chris - please make the cat smarter.
+
+
 cat.move = function() {
-	game.move( cat, 'right' );
+
+//Move up or down
+	//Move Cat Up
+	if (mouse.y > cat.y){
+		game.move( cat, 'up' );
+		}
+		
+	else if (mouse.y == cat.y){
+		//Do nothing
+		}
+		
+	//Move Cat Down
+		else{
+			game.move( cat, 'down' );
+			}
+	
+//Move left or right
+	//Move Cat Right
+	if (mouse.x > cat.x){
+		game.move(cat, 'right');
+		}
+		
+		else if (mouse.x == cat.x){
+		//Do nothing
+		}
+	
+	//Move Cat Left	
+		else{
+			game.move(cat, 'left');
+			}
+
+
 }
