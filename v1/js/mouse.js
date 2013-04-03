@@ -1,11 +1,11 @@
 var mouse = {};
 
-mouse.init = function() {
+mouse.init = function(x, y) {
 	mouse.symbol = '&#9765;';
 	mouse.type = 'player';
 	mouse.movable = true;
-	mouse.x = 5;
-	mouse.y = 3;
+	mouse.x = x;
+	mouse.y = y;
 	mouse.lives = 3;
 	mouse.direction = '';
 

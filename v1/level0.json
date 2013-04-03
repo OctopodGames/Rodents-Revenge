@@ -1,0 +1,76 @@
+{
+	"board": {
+		"x": 10,
+		"y": 10
+	},
+	"mouse": {
+		"x": 2,
+		"y": 2,
+		"type": "mouse"
+	},
+	"cats":[ 
+		{	
+			"x": 1,
+			"y": 1,
+			"type": "cat"
+		},
+		{
+			"x": 3,
+			"y": 3,
+			"type": "cat"
+		}
+	],
+	"blocks": [
+		{
+			"x": 4,
+			"y": 4,
+			"type": "block"
+		},
+		{
+			"x": 6,
+			"y": 6,
+			"type": "block"
+		}
+	],
+	"rocks": [
+		{
+			"x": 8,
+			"y": 8,
+			"type": "rock"
+		},
+		{
+			"x": 3,
+			"y": 5,
+			"type": "rock"
+		}
+	],
+	"traps": [
+		{
+			"x": 7,
+			"y": 8,
+			"type": "trap"
+		},
+		{
+			"x": 9,
+			"y": 9,
+			"type": "trap"
+		}
+	],
+	"holes": [
+		{
+			"x": 9,
+			"y": 9,
+			"type": "sinkhole"
+		}
+	]
+}
+
+
+
+
+
+
+
+
+
+
