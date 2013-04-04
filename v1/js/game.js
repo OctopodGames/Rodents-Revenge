@@ -5,6 +5,10 @@ game.blocks = new Array;
 game.rocks = new Array;
 game.traps = new Array;
 game.holes = new Array;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6f15f2fb11e994496882da5aca453d57f36a8258
 
 game.handleKey = function( e ) {
 	switch ( e.keyCode ) {
@@ -71,6 +75,7 @@ game.move = function( who, direction ) {
 };
 
 
+<<<<<<< HEAD
 game.start = function(number) {
 	var jqxhr = $.getJSON('level'+number+'.json',function(data){
 		board.init(data.board.x,data.board.y);
@@ -87,6 +92,12 @@ game.start = function(number) {
 		game.timer = setInterval( 'game.moveAll()', 500 );
 
 	});
+=======
+game.start = function( number ) {
+
+	game.readLevel( number );
+	$(document).keydown( game.handleKey );
+>>>>>>> 6f15f2fb11e994496882da5aca453d57f36a8258
 };
 
 game.moveAll = function(){
@@ -200,7 +211,49 @@ game.end = function() {
 	cats.forEach( clearInterval( this.timer ) ); 
 	alert( "Loser!");
 }
+<<<<<<< HEAD
 
+=======
+game.readLevel = function( number ) {
+	//get the requested level file
+	$.getJSON('level'+number+'.json', function(level) {
+	
+		console.log(level);
+		
+		//set the grid size
+		game.gridSize = board.init( level.board.x, level.board.y );
+		
+		//set the mouse starting place
+		game.mouse = mouse.init(level.mouse.x, level.mouse.y);
+		
+		//cat position
+		$.each(level.cats, function(){
+			game.cats.push( cat.init(this.x, this.y ) );
+		});
+		
+		//block position
+		$.each(level.blocks, function(){
+			game.blocks.push( block.init( this.x, this.y ) );
+		});
+		
+		//rock position
+		$.each( level.rocks, function(){
+			game.rocks.push( rock.init( this.x, this.y ) );
+		});
+		
+		//trap position
+		$.each( level.traps, function(){
+			//it's a trap!
+			game.traps.push( trap.init( this.x, this.y ) );
+		});
+
+		//hole position
+		$.each( level.holes, function(){
+			game.holes.push( sinkhole.init( this.x, this.y ) );
+		}); 
+	});
+}
+>>>>>>> 6f15f2fb11e994496882da5aca453d57f36a8258
 
 /* Global variables we might need */
 var key = {
@@ -215,5 +268,9 @@ var key = {
 }
 
 $(function() {
+<<<<<<< HEAD
 	game.start(0);
+=======
+	game.start( 0 );
+>>>>>>> 6f15f2fb11e994496882da5aca453d57f36a8258
 });
