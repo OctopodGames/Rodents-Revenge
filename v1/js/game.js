@@ -1,14 +1,22 @@
 var game = {};
-game.cats = new Array;
-game.yarns = new Array;
-game.blocks = new Array;
-game.rocks = new Array;
-game.traps = new Array;
-game.holes = new Array;
-<<<<<<< HEAD
-=======
+game.cats = [];
+game.yarns = {};
+game.blocks = {};
+game.rocks = {};
+game.traps = {};
+game.holes = {};
 
->>>>>>> 6f15f2fb11e994496882da5aca453d57f36a8258
+/* BASE CRAP */
+var key = {
+	left: 37,
+	up: 38,
+	right: 39,
+	down: 40,
+	w: 87,
+	a: 65,
+	s: 83,
+	d: 68
+}
 
 game.handleKey = function( e ) {
 	switch ( e.keyCode ) {
@@ -35,6 +43,75 @@ game.handleKey = function( e ) {
 
 }
 
+
+game.start = function( number ) {
+
+	this.readLevel( number );
+	this.clock = setInterval("game.timer()",1500);
+	$(document).keydown( game.handleKey );
+};
+
+game.timer = function(){
+	//timed automatic moving of cats/yarn - game.end stops it
+	$.each(game.cats,function(){
+		cat.move(this);
+	})
+	$.each(game.yarns,function(){
+		yarn.move(this);
+	})
+}
+
+game.end = function() {
+	/* stops cats moving after game ends - we'll need one for yarn too!
+	// @TODO: should be a foreach..but we're not there yet */
+
+	// @TODO: the following line never returns. Something's broke.
+	clearInterval( game.clock ); 
+	alert( "Loser!");
+}
+game.readLevel = function( number ) {
+	//get the requested level file
+	$.getJSON('level'+number+'.json', function(level) {
+
+		console.log(level);
+
+		//set the grid size
+		game.gridSize = board.init( level.board.x, level.board.y );
+
+		//set the mouse starting place
+		game.mouse = new mouse(level.mouse.x, level.mouse.y);
+
+		//cat positions
+		$.each(level.cats, function(){
+		game.cats.push( new cat(this.x, this.y ) );
+		});
+
+		//block positions
+		$.each(level.blocks, function(){
+		game.blocks.push( new block( this.x, this.y ) );
+		});
+
+		//rock positions
+		$.each( level.rocks, function(){
+		game.rocks.push( new rock( this.x, this.y ) );
+		});
+
+		//trap positions
+		$.each( level.traps, function(){
+		//it's a trap!
+		game.traps.push( new trap( this.x, this.y ) );
+		});
+
+		//hole positions
+		$.each( level.holes, function(){
+		game.holes.push( new sinkhole( this.x, this.y ) );
+		}); 
+		
+	});
+}
+
+
+/* MOVEMENT */
 game.move = function( who, direction ) {
 	if(mouse.lives > 0){
 		var keepX = who.x;
@@ -48,15 +125,8 @@ game.move = function( who, direction ) {
 		newSquare = board.getSquare( who.x, who.y, direction );
 		var newX = newSquare[0];
 		var newY = newSquare[1];
-		
-		if(newY == undefined){
-			alert("Y: "+who.y);
-		}
-		if(newX == undefined){
-			alert("X: "+who.x);
-		}
-		
-		if(newX == -1 || newY == -1) {
+
+		if(newX == -1) {
 			// dont move...hit an edge
 			return false;		
 		} else if( board.squares[newX][newY] !== null ) {
@@ -75,36 +145,6 @@ game.move = function( who, direction ) {
 };
 
 
-<<<<<<< HEAD
-game.start = function(number) {
-	var jqxhr = $.getJSON('level'+number+'.json',function(data){
-		board.init(data.board.x,data.board.y);
-		mouse.init(data.mouse.x,data.mouse.y);
-		$.each(data.cats,function(){
-			var kat = new cat(this.x,this.y);
-			game.cats.push(kat);
-		});
-		
-		// @TODO: none of these are being updated when an object vanishes
-		// @TODO: foreach file.cats...
-
-		$(document).keydown( game.handleKey );
-		game.timer = setInterval( 'game.moveAll()', 500 );
-
-	});
-=======
-game.start = function( number ) {
-
-	game.readLevel( number );
-	$(document).keydown( game.handleKey );
->>>>>>> 6f15f2fb11e994496882da5aca453d57f36a8258
-};
-
-game.moveAll = function(){
-		$.each(game.cats,function(){
-		   game.move(this,'right');	
-		});
-}
 
 game.collide = function( movedObj, x, y ) {
 	// @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
@@ -202,75 +242,7 @@ game.findChainEnd = function( x, y ) {
 	return chainEnd;
 }
 
-
-game.end = function() {
-	/* stops cats moving after game ends - we'll need one for yarn too!
-	// @TODO: should be a foreach..but we're not there yet */
-
-	// @TODO: the following line never returns. Something's broke.
-	cats.forEach( clearInterval( this.timer ) ); 
-	alert( "Loser!");
-}
-<<<<<<< HEAD
-
-=======
-game.readLevel = function( number ) {
-	//get the requested level file
-	$.getJSON('level'+number+'.json', function(level) {
-	
-		console.log(level);
-		
-		//set the grid size
-		game.gridSize = board.init( level.board.x, level.board.y );
-		
-		//set the mouse starting place
-		game.mouse = mouse.init(level.mouse.x, level.mouse.y);
-		
-		//cat position
-		$.each(level.cats, function(){
-			game.cats.push( cat.init(this.x, this.y ) );
-		});
-		
-		//block position
-		$.each(level.blocks, function(){
-			game.blocks.push( block.init( this.x, this.y ) );
-		});
-		
-		//rock position
-		$.each( level.rocks, function(){
-			game.rocks.push( rock.init( this.x, this.y ) );
-		});
-		
-		//trap position
-		$.each( level.traps, function(){
-			//it's a trap!
-			game.traps.push( trap.init( this.x, this.y ) );
-		});
-
-		//hole position
-		$.each( level.holes, function(){
-			game.holes.push( sinkhole.init( this.x, this.y ) );
-		}); 
-	});
-}
->>>>>>> 6f15f2fb11e994496882da5aca453d57f36a8258
-
-/* Global variables we might need */
-var key = {
-	left: 37,
-	up: 38,
-	right: 39,
-	down: 40,
-	w: 87,
-	a: 65,
-	s: 83,
-	d: 68
-}
-
+/* START (INTI) GAME */
 $(function() {
-<<<<<<< HEAD
-	game.start(0);
-=======
 	game.start( 0 );
->>>>>>> 6f15f2fb11e994496882da5aca453d57f36a8258
 });

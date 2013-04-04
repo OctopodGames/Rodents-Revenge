@@ -1,11 +1,9 @@
-var sinkhole = {};
+function sinkhole (x,y) {
+	this.symbol = '&#9732';
+	this.type = 'this';
+	this.movable = false;
+	this.x = x;
+	this.y = y;
 
-sinkhole.init = function(x,y) {
-	sinkhole.symbol = '&#9732';
-	sinkhole.type = 'sinkhole';
-	sinkhole.movable = false;
-	sinkhole.x = x;
-	sinkhole.y = y;
-
-	board.place( sinkhole );
+	board.place( this );
 };

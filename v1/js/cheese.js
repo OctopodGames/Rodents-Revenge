@@ -1,12 +1,10 @@
-var cheese = {};
+function cheese (x,y) {
+	this.symbol = '&#9744;';
+	this.type = 'this';
+	this.movable = true;
+	this.x = x;
+	this.y = y;
 
-cheese.init = function(x,y) {
-	cheese.symbol = '&#9744;';
-	cheese.type = 'cheese';
-	cheese.movable = true;
-	cheese.x = x;
-	cheese.y = y;
-
-	board.place( cheese );
+	board.place( this );
 };
 

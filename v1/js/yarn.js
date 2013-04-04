@@ -1,22 +1,14 @@
-var yarn = {};
+function yarn (x, y) {
+	this.x = x;
+	this.y = y;
+	this.symbol = '&#9991;';
+	this.type = 'this';
+	this.movable = true;
+	this.timer=null;
 
-yarn.init = function(x, y) {
-	yarn.x = x;
-	yarn.y = y;
-	yarn.symbol = '&#9991;';
-	yarn.type = 'yarn';
-	yarn.movable = true;
-	yarn.timer=null;
-
-	board.place( yarn );
-
-	yarn.go();
+	board.place( this );
 };
 
-
-yarn.go = function() {
-	yarn.timer = setInterval( yarn.move, 500 );
-};
 
 // @TODO: please make the yarn smarter.
 yarn.move = function() {

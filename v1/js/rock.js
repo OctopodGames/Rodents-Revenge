@@ -1,11 +1,9 @@
-var rock = {};
+function rock (x,y) {
+	this.symbol = '&#9746;';
+	this.type = 'this';
+	this.movable = false;
+	this.x = x;
+	this.y = y;
 
-rock.init = function(x,y) {
-	rock.symbol = '&#9746;';
-	rock.type = 'rock';
-	rock.movable = false;
-	rock.x = x;
-	rock.y = y;
-
-	board.place( rock );
+	board.place( this );
 };
