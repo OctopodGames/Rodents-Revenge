@@ -38,54 +38,47 @@ board.remove = function( x, y ) {
 }
 
 board.getSquare = function( x, y, direction ) {
-	var newX = 0;
-	var newY = 0;
+	var square = new Array;
+	square[0] = x;
+	square[1] = y;
 	// -1, -1 means cannot move in that direction - met a board edge
 	switch ( direction ) {
 		case 'left':
 		if ( 0 == x ) {
-			newX = -1;
-			newY = -1;
+			square[0] = -1;
+			square[1] = -1;
 		} else {
-			newX = x - 1;
-			newY = y;
+			square[0] = x - 1;
 		}
 		break;
 
 		case 'up':
 		if (  (this.rows - 1) == y ) {
-			newX = -1;
-			newY = -1;
+			square[0] = -1;
+			square[1] = -1;
 		} else {
-			newX = x;
-			newY = y + 1;
+			square[1] = y + 1;
 		}
 		break;
 
 		case 'right':
 		if ( (this.columns - 1) == x ) {
-			newX = -1;
-			newY = -1;
+			square[0] = -1;
+			square[1] = -1;
 		} else {
-			newX = x + 1;
-			newY = y;
+			square[0] = x + 1;
 		}
 		break;
 
 		case 'down':
 		if ( 0 == y ) {
-			newX = -1;
-			newY = -1;
+			square[0] = -1;
+			square[1] = -1;
 		} else {
-			newX = x;
-			newY = y - 1;
+			square[1] = y - 1;
 		}
 		break;
 	}
-	
-	var square = new Array;
-	square[0] = newX;
-	square[1] = newY;
 	return square;
 }
 

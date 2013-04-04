@@ -1,5 +1,10 @@
 var game = {};
-var game.level = {};
+game.cats = new Array;
+game.yarns = new Array;
+game.blocks = new Array;
+game.rocks = new Array;
+game.traps = new Array;
+game.holes = new Array;
 
 game.handleKey = function( e ) {
 	switch ( e.keyCode ) {
@@ -35,12 +40,19 @@ game.move = function( who, direction ) {
 			// since I don't want to pass direction through two functions
 			who.direction = direction;
 		}	
-		
+
 		newSquare = board.getSquare( who.x, who.y, direction );
 		var newX = newSquare[0];
 		var newY = newSquare[1];
-
-		if(newX == -1) {
+		
+		if(newY == undefined){
+			alert("Y: "+who.y);
+		}
+		if(newX == undefined){
+			alert("X: "+who.x);
+		}
+		
+		if(newX == -1 || newY == -1) {
 			// dont move...hit an edge
 			return false;		
 		} else if( board.squares[newX][newY] !== null ) {
@@ -59,33 +71,29 @@ game.move = function( who, direction ) {
 };
 
 
-game.start = function() {
-	game.cats = new Array;
-	game.yarns = new Array;
-	game.blocks = new Array;
-	game.rocks = new Array;
-	game.traps = new Array;
-	game.holes = new Array;
-	board.init( 10, 10 );
-	mouse.init();
-	// @TODO: none of these are being updated when an object vanishes
-	// @TODO: foreach file.cats...
-	game.cats.push( cat.init(1,1) );
-	// @TODO: same for yarn...
-	game.yarns.push( yarn.init(8,7) );
-	// @TODO: foreach file.block...
-	game.blocks.push( block.init(3,3) );
-	game.blocks.push( block.init(4,3) );
-	// @TODO: foreach file.rock...
-	game.rocks.push( rock.init(8,8) );
-	//game.rocks.push( rock.init(2,3) );
-	// @TODO: foreach file.trap...
-	game.traps.push( trap.init(6,6) );
-	// @TODO: foreach file.sinkhole...
-	//game.holes.push( sinkhole.init(2,3) );
-	game.holes.push( sinkhole.init(4,4) );
-	$(document).keydown( game.handleKey );
+game.start = function(number) {
+	var jqxhr = $.getJSON('level'+number+'.json',function(data){
+		board.init(data.board.x,data.board.y);
+		mouse.init(data.mouse.x,data.mouse.y);
+		$.each(data.cats,function(){
+			var kat = new cat(this.x,this.y);
+			game.cats.push(kat);
+		});
+		
+		// @TODO: none of these are being updated when an object vanishes
+		// @TODO: foreach file.cats...
+
+		$(document).keydown( game.handleKey );
+		game.timer = setInterval( 'game.moveAll()', 500 );
+
+	});
 };
+
+game.moveAll = function(){
+		$.each(game.cats,function(){
+		   game.move(this,'right');	
+		});
+}
 
 game.collide = function( movedObj, x, y ) {
 	// @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
@@ -97,19 +105,19 @@ game.collide = function( movedObj, x, y ) {
 			case 'sinkhole':
 				mouse.die();
 				return true;   //don't execute move, next mouse re-appeared in safe zone.
-			break;
+				break;
 
 			case 'block':
-				if(this.shoveBlockChain( x, y )) {
-					return false;
-				} else {
-					return true;
-				}
+			if(this.shoveBlockChain( x, y )) {
+				return false;
+			} else {
+				return true;
+			}
 			break;
 
 			case 'rock':
 				return true;
-			break;
+				break;
 		}
 	}
 
@@ -145,17 +153,17 @@ game.findChainEnd = function( x, y ) {
 	//find the end of the chain of blocks
 	var chainEnd = new Array;
 	var newSquare = new Array;
-	
+
 	while(board.squares[x][y] === 'block'){
 		newSquare = board.getSquare( x, y, mouse.direction );
 		x = newSquare[0];
 		y = newSquare[1];
 	}
-	
+
 	chainEnd[0] = true;
 	chainEnd[2] = x;
 	chainEnd[3] = y;
-	
+
 	// x,y now points to whatever is at the end
 	if(board.squares[x][y]) {
 		// not null, so something other than space
@@ -168,14 +176,14 @@ game.findChainEnd = function( x, y ) {
 			//non-movable
 			case 'trap':
 			case 'rock':
-			chainEnd[0] = false;
-			return chainEnd;
-			break;
-			
+				chainEnd[0] = false;
+				return chainEnd;
+				break;
+
 			// for now, cat and yarn ball icons are erased by blocks. Oops.
 			case 'sinkhole':
-			chainEnd[1] = 'sinkhole';
-			break;
+				chainEnd[1] = 'sinkhole';
+				break;
 		}
 	} else {
 		chainEnd[1] = 'space';
@@ -192,22 +200,7 @@ game.end = function() {
 	cats.forEach( clearInterval( this.timer ) ); 
 	alert( "Loser!");
 }
-game.readLevel = function( number ) {
-	this.level = $.request('level'+number+'.json');
-	//delegate the parameters to the proper objects
-	//grid size
-	//mouse placement
-	//cats number = len(cats)
-	//cat position
-	//blocks number = len(blocks)
-	//block position
-	//rocks number = len(rocks)
-	//rock position
-	//traps number = len(traps)
-	//trap position
-	//holes number = len(holes)
-	//hole position 
-}
+
 
 /* Global variables we might need */
 var key = {
@@ -222,5 +215,5 @@ var key = {
 }
 
 $(function() {
-	game.start();
+	game.start(0);
 });
