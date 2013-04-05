@@ -4,6 +4,7 @@ function block(x,y) {
 	this.movable = true;
 	this.x = x;
 	this.y = y;
+	this.fatal = false;
 
 	board.place( this );
 };

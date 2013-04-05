@@ -23,7 +23,7 @@ board.init = function( rows, columns ){
 		}
 		myboard+="</div>";
 	}
-	
+
 	$('#board').html( myboard );
 }
 
@@ -39,46 +39,81 @@ board.remove = function( x, y ) {
 
 board.getSquare = function( x, y, direction ) {
 	var square = new Array;
-	square[0] = x;
-	square[1] = y;
+	newX = x;
+	newY = y;
 	// -1, -1 means cannot move in that direction - met a board edge
 	switch ( direction ) {
 		case 'left':
 		if ( 0 == x ) {
-			square[0] = -1;
-			square[1] = -1;
+			newX = -1;
+			newY = -1;
 		} else {
-			square[0] = x - 1;
+			newX = x - 1;
 		}
 		break;
 
 		case 'up':
 		if (  (this.rows - 1) == y ) {
-			square[0] = -1;
-			square[1] = -1;
+			newX = -1;
+			newY = -1;
 		} else {
-			square[1] = y + 1;
+			newY = y + 1;
 		}
 		break;
 
 		case 'right':
 		if ( (this.columns - 1) == x ) {
-			square[0] = -1;
-			square[1] = -1;
+			newX = -1;
 		} else {
-			square[0] = x + 1;
+			newX = x + 1;
 		}
 		break;
 
 		case 'down':
 		if ( 0 == y ) {
-			square[0] = -1;
-			square[1] = -1;
+			newX = -1;
 		} else {
-			square[1] = y - 1;
+			newY = y - 1;
+		}
+		break;
+
+		case 'upleft':
+		if (  (this.rows - 1) == y || x == 0) {
+			newX = -1;
+		} else {
+			newX = x - 1;
+			newY = y + 1;
+		}
+		break;
+
+		case 'upright':
+		if (  (this.rows - 1) == y ) {
+			newX = -1;
+		} else {
+			newX = x + 1;
+			newY = y + 1;
+		}
+		break;
+
+		case 'downleft':
+		if ( 0 == y ) {
+			newX = -1;
+		} else {
+			newX = x - 1;
+			newY = y - 1;
+		}
+		break;
+
+		case 'downright':
+		if ( 0 == y ) {
+			newX = -1;
+		} else {
+			newX = x + 1;
+			newY = y - 1;
 		}
 		break;
 	}
+	square = new Array(newX, newY);
 	return square;
 }
 

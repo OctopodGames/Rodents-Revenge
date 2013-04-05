@@ -4,6 +4,7 @@ function rock (x,y) {
 	this.movable = false;
 	this.x = x;
 	this.y = y;
+	this.fatal = false;
 
 	board.place( this );
 };

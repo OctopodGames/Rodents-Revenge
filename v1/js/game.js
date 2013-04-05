@@ -1,10 +1,10 @@
 var game = {};
 game.cats = [];
-game.yarns = {};
-game.blocks = {};
-game.rocks = {};
-game.traps = {};
-game.holes = {};
+game.yarns = [];
+game.blocks = [];
+game.rocks = [];
+game.traps = [];
+game.holes = [];
 
 /* BASE CRAP */
 var key = {
@@ -43,7 +43,6 @@ game.handleKey = function( e ) {
 
 }
 
-
 game.start = function( number ) {
 
 	this.readLevel( number );
@@ -61,14 +60,6 @@ game.timer = function(){
 	})
 }
 
-game.end = function() {
-	/* stops cats moving after game ends - we'll need one for yarn too!
-	// @TODO: should be a foreach..but we're not there yet */
-
-	// @TODO: the following line never returns. Something's broke.
-	clearInterval( game.clock ); 
-	alert( "Loser!");
-}
 game.readLevel = function( number ) {
 	//get the requested level file
 	$.getJSON('level'+number+'.json', function(level) {
@@ -110,8 +101,17 @@ game.readLevel = function( number ) {
 	});
 }
 
+game.end = function() {
+	/* stops cats moving after game ends - we'll need one for yarn too!
+	// @TODO: should be a foreach..but we're not there yet */
+
+	// @TODO: the following line never returns. Something's broke.
+	clearInterval( game.clock ); 
+	alert( "Loser!");
+}
 
 /* MOVEMENT */
+
 game.move = function( who, direction ) {
 	if(mouse.lives > 0){
 		var keepX = who.x;
@@ -140,7 +140,8 @@ game.move = function( who, direction ) {
 		who.x = newX;
 		who.y = newY;
 		board.remove( keepX, keepY );
-		board.place( who );	
+		board.place( who );
+		return true;	
 	}	
 };
 
@@ -155,7 +156,7 @@ game.collide = function( movedObj, x, y ) {
 			case 'trap':
 			case 'sinkhole':
 				mouse.die();
-				return true;   //don't execute move, next mouse re-appeared in safe zone.
+				return true;   //don't execute move, next mouse re-appears in center.
 				break;
 
 			case 'block':

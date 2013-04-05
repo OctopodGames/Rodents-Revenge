@@ -5,6 +5,7 @@ function yarn (x, y) {
 	this.type = 'this';
 	this.movable = true;
 	this.timer=null;
+	this.fatal = true;
 
 	board.place( this );
 };

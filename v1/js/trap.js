@@ -4,6 +4,7 @@ function trap (x,y) {
 	this.movable = false;
 	this.x = x;
 	this.y = y;
+	this.fatal = true;
 
 	board.place( this );
 };

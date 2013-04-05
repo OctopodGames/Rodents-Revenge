@@ -4,6 +4,7 @@ function cheese (x,y) {
 	this.movable = true;
 	this.x = x;
 	this.y = y;
+	this.fatal = true;
 
 	board.place( this );
 };

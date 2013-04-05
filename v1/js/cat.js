@@ -3,45 +3,78 @@ function cat (x,y) {
 	this.type = 'cat';
 	this.x = x;
 	this.y = y;
-	this.timer=null;
+	this.timer = null;
+	this.fatal = true;
 
 	board.place( this );
 };
 
 // @TODO: chris - please make the cat smarter.
-
-
-cat.move = function(kitty) {
-
-//Move up or down
-	//Move Cat Up
-	if (mouse.y > kitty.y){
-		game.move( kitty, 'up' );
-		}
-		
-	else if (mouse.y == kitty.y){
-		//Do nothing
-		}
-		
-	//Move Cat Down
-		else{
-			game.move( kitty, 'down' );
+cat.move = function ( kitty, tried ) {
+	//determine distance
+	distX = mouse.x - kitty.x;
+	distY = mouse.y - kitty.y;
+	if ( ( Math.abs(distX) > Math.abs(distY) ) && distX != 0 ){//horizontal distance greater - move horizontally
+		if (distX > 0){
+			if ( !game.move( kitty, 'right' ) ) {
+				if (distY > 0){
+					game.move( kitty, 'up' );
+				} else {
+					game.move( kitty, 'down' );
+				}
 			}
-	
-//Move left or right
-	//Move Cat Right
-	if (mouse.x > kitty.x){
-		game.move(cat, 'right');
-		}
-		
-		else if (mouse.x == kitty.x){
-		//Do nothing
-		}
-	
-	//Move Cat Left	
-		else{
-			game.move(kitty, 'left');
+		} else {
+			if ( !game.move( kitty, 'left' ) ) {
+				if (distY > 0){
+					game.move( kitty, 'up' );
+				} else {
+					game.move( kitty, 'down' );
+				}
 			}
+		}
+		return;
+	}
 
+	if ( Math.abs(distX) < Math.abs(distY) && distY != 0 ) {//vertical distance greater - move vertically
+		if (distY > 0){
+			if ( !game.move( kitty, 'up' ) ) {
+				if (distX > 0){
+					game.move( kitty, 'right' );
+				} else {
+					game.move( kitty, 'left' );
+				}
+			}
+		} else {
+			if ( !game.move( kitty, 'down' ) ) {
+				if (distX > 0){
+					game.move( kitty, 'right' );
+				} else {
+					game.move( kitty, 'left' );
+				}
+			}
+		}
+		return;
+	}
+	/* Distances even - move diagonally
+	* At this point, we're assuming they're 
+	* not on top of each other - collide handles that
+	*/
+	if ( distX != 0 && distY != 0 ) { 
+		if (distX > 0){
+			if (distY > 0){
+				game.move( kitty, 'upright' );
+			} else {
+				game.move( kitty, 'downright' );
+			}
+		} else {
+			if (distY > 0){
+				game.move( kitty, 'upleft' );
+			} else {
+				game.move( kitty, 'downleft' );
+			}
+		}
 
+	}
+	return;
 }
+

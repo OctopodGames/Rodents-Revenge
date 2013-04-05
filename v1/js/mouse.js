@@ -6,6 +6,7 @@ function mouse (x, y) {
 	mouse.y = y;
 	mouse.lives = 3;
 	mouse.direction = '';
+	this.fatal = true;
 
 	board.place( mouse );
 };
