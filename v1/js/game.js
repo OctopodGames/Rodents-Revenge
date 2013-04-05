@@ -19,6 +19,9 @@ var key = {
 }
 
 game.handleKey = function( e ) {
+	if(mouse.movable == false){
+		return;
+	}
 	switch ( e.keyCode ) {
 		case key.left:
 		case key.a:
@@ -145,7 +148,10 @@ game.move = function( who, direction ) {
 	}	
 };
 
-
+game.start = function( number ) {
+	game.readLevel( number );
+	$(document).keydown( game.handleKey );
+};
 
 game.collide = function( movedObj, x, y ) {
 	// @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
@@ -153,12 +159,17 @@ game.collide = function( movedObj, x, y ) {
 		switch ( board.squares[x][y] ) {
 			case 'cat':
 			case 'yarn':
-			case 'trap':
-			case 'sinkhole':
 				mouse.die();
-				return true;   //don't execute move, next mouse re-appears in center.
+				return true;   //don't execute move, next mouse re-appeared in safe zone.
 				break;
-
+			case 'sinkhole':
+				mouse.stuck( x, y );  //Mouse is stuck for ten cat turns
+				return false;  
+				break;
+	  		case 'trap':
+	  			mouse.die();
+	  			board.remove( x, y );   //remove trap from board
+				return true;
 			case 'block':
 			if(this.shoveBlockChain( x, y )) {
 				return false;
@@ -166,7 +177,6 @@ game.collide = function( movedObj, x, y ) {
 				return true;
 			}
 			break;
-
 			case 'rock':
 				return true;
 				break;

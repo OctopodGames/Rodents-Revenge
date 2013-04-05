@@ -77,4 +77,3 @@ cat.move = function ( kitty, tried ) {
 	}
 	return;
 }
-
