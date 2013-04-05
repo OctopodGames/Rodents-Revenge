@@ -1,11 +1,22 @@
 var game = {};
-game.cats = new Array;
-game.yarns = new Array;
-game.blocks = new Array;
-game.rocks = new Array;
-game.traps = new Array;
-game.holes = new Array;
+game.cats = [];
+game.yarns = [];
+game.blocks = [];
+game.rocks = [];
+game.traps = [];
+game.holes = [];
 
+/* BASE CRAP */
+var key = {
+	left: 37,
+	up: 38,
+	right: 39,
+	down: 40,
+	w: 87,
+	a: 65,
+	s: 83,
+	d: 68
+}
 
 game.handleKey = function( e ) {
 	switch ( e.keyCode ) {
@@ -32,6 +43,75 @@ game.handleKey = function( e ) {
 
 }
 
+game.start = function( number ) {
+
+	this.readLevel( number );
+	this.clock = setInterval("game.timer()",1500);
+	$(document).keydown( game.handleKey );
+};
+
+game.timer = function(){
+	//timed automatic moving of cats/yarn - game.end stops it
+	$.each(game.cats,function(){
+		cat.move(this);
+	})
+	$.each(game.yarns,function(){
+		yarn.move(this);
+	})
+}
+
+game.readLevel = function( number ) {
+	//get the requested level file
+	$.getJSON('level'+number+'.json', function(level) {
+
+		console.log(level);
+
+		//set the grid size
+		game.gridSize = board.init( level.board.x, level.board.y );
+
+		//set the mouse starting place
+		game.mouse = new mouse(level.mouse.x, level.mouse.y);
+
+		//cat positions
+		$.each(level.cats, function(){
+		game.cats.push( new cat(this.x, this.y ) );
+		});
+
+		//block positions
+		$.each(level.blocks, function(){
+		game.blocks.push( new block( this.x, this.y ) );
+		});
+
+		//rock positions
+		$.each( level.rocks, function(){
+		game.rocks.push( new rock( this.x, this.y ) );
+		});
+
+		//trap positions
+		$.each( level.traps, function(){
+		//it's a trap!
+		game.traps.push( new trap( this.x, this.y ) );
+		});
+
+		//hole positions
+		$.each( level.holes, function(){
+		game.holes.push( new sinkhole( this.x, this.y ) );
+		}); 
+		
+	});
+}
+
+game.end = function() {
+	/* stops cats moving after game ends - we'll need one for yarn too!
+	// @TODO: should be a foreach..but we're not there yet */
+
+	// @TODO: the following line never returns. Something's broke.
+	clearInterval( game.clock ); 
+	alert( "Loser!");
+}
+
+/* MOVEMENT */
+
 game.move = function( who, direction ) {
 	if(mouse.lives > 0){
 		var keepX = who.x;
@@ -41,7 +121,7 @@ game.move = function( who, direction ) {
 			// since I don't want to pass direction through two functions
 			who.direction = direction;
 		}	
-		
+
 		newSquare = board.getSquare( who.x, who.y, direction );
 		var newX = newSquare[0];
 		var newY = newSquare[1];
@@ -60,16 +140,12 @@ game.move = function( who, direction ) {
 		who.x = newX;
 		who.y = newY;
 		board.remove( keepX, keepY );
-		board.place( who );	
+		board.place( who );
+		return true;	
 	}	
 };
 
 
-game.start = function( number ) {
-
-	game.readLevel( number );
-	$(document).keydown( game.handleKey );
-};
 
 game.collide = function( movedObj, x, y ) {
 	// @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
@@ -80,20 +156,20 @@ game.collide = function( movedObj, x, y ) {
 			case 'trap':
 			case 'sinkhole':
 				mouse.die();
-				return true;   //don't execute move, next mouse re-appeared in safe zone.
-			break;
+				return true;   //don't execute move, next mouse re-appears in center.
+				break;
 
 			case 'block':
-				if(this.shoveBlockChain( x, y )) {
-					return false;
-				} else {
-					return true;
-				}
+			if(this.shoveBlockChain( x, y )) {
+				return false;
+			} else {
+				return true;
+			}
 			break;
 
 			case 'rock':
 				return true;
-			break;
+				break;
 		}
 	}
 
@@ -129,17 +205,17 @@ game.findChainEnd = function( x, y ) {
 	//find the end of the chain of blocks
 	var chainEnd = new Array;
 	var newSquare = new Array;
-	
+
 	while(board.squares[x][y] === 'block'){
 		newSquare = board.getSquare( x, y, mouse.direction );
 		x = newSquare[0];
 		y = newSquare[1];
 	}
-	
+
 	chainEnd[0] = true;
 	chainEnd[2] = x;
 	chainEnd[3] = y;
-	
+
 	// x,y now points to whatever is at the end
 	if(board.squares[x][y]) {
 		// not null, so something other than space
@@ -152,14 +228,14 @@ game.findChainEnd = function( x, y ) {
 			//non-movable
 			case 'trap':
 			case 'rock':
-			chainEnd[0] = false;
-			return chainEnd;
-			break;
-			
+				chainEnd[0] = false;
+				return chainEnd;
+				break;
+
 			// for now, cat and yarn ball icons are erased by blocks. Oops.
 			case 'sinkhole':
-			chainEnd[1] = 'sinkhole';
-			break;
+				chainEnd[1] = 'sinkhole';
+				break;
 		}
 	} else {
 		chainEnd[1] = 'space';
@@ -167,67 +243,7 @@ game.findChainEnd = function( x, y ) {
 	return chainEnd;
 }
 
-
-game.end = function() {
-	/* stops cats moving after game ends - we'll need one for yarn too!
-	// @TODO: should be a foreach..but we're not there yet */
-
-	// @TODO: the following line never returns. Something's broke.
-	cats.forEach( clearInterval( this.timer ) ); 
-	alert( "Loser!");
-}
-game.readLevel = function( number ) {
-	//get the requested level file
-	$.getJSON('level'+number+'.json', function(level) {
-	
-		console.log(level);
-		
-		//set the grid size
-		game.gridSize = board.init( level.board.x, level.board.y );
-		
-		//set the mouse starting place
-		game.mouse = mouse.init(level.mouse.x, level.mouse.y);
-		
-		//cat position
-		$.each(level.cats, function(){
-			game.cats.push( cat.init(this.x, this.y ) );
-		});
-		
-		//block position
-		$.each(level.blocks, function(){
-			game.blocks.push( block.init( this.x, this.y ) );
-		});
-		
-		//rock position
-		$.each( level.rocks, function(){
-			game.rocks.push( rock.init( this.x, this.y ) );
-		});
-		
-		//trap position
-		$.each( level.traps, function(){
-			//it's a trap!
-			game.traps.push( trap.init( this.x, this.y ) );
-		});
-
-		//hole position
-		$.each( level.holes, function(){
-			game.holes.push( sinkhole.init( this.x, this.y ) );
-		}); 
-	});
-}
-
-/* Global variables we might need */
-var key = {
-	left: 37,
-	up: 38,
-	right: 39,
-	down: 40,
-	w: 87,
-	a: 65,
-	s: 83,
-	d: 68
-}
-
+/* START (INTI) GAME */
 $(function() {
 	game.start( 0 );
 });

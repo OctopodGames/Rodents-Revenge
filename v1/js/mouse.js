@@ -1,6 +1,4 @@
-var mouse = {};
-
-mouse.init = function(x, y) {
+function mouse (x, y) {
 	mouse.symbol = '&#9765;';
 	mouse.type = 'player';
 	mouse.movable = true;
@@ -8,6 +6,7 @@ mouse.init = function(x, y) {
 	mouse.y = y;
 	mouse.lives = 3;
 	mouse.direction = '';
+	this.fatal = true;
 
 	board.place( mouse );
 };

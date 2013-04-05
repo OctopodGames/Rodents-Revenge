@@ -1,12 +1,11 @@
-var block = {};
+function block(x,y) {
+	this.symbol = '&#9744;';
+	this.type = 'this';
+	this.movable = true;
+	this.x = x;
+	this.y = y;
+	this.fatal = false;
 
-block.init = function(x,y) {
-	block.symbol = '&#9744;';
-	block.type = 'block';
-	block.movable = true;
-	block.x = x;
-	block.y = y;
-
-	board.place( block );
+	board.place( this );
 };
 

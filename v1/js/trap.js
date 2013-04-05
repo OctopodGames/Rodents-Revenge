@@ -1,11 +1,10 @@
-var trap = {};
+function trap (x,y) {
+	this.symbol = '&#9832;';
+	this.type = 'this';
+	this.movable = false;
+	this.x = x;
+	this.y = y;
+	this.fatal = true;
 
-trap.init = function(x,y) {
-	trap.symbol = '&#9832;';
-	trap.type = 'trap';
-	trap.movable = false;
-	trap.x = x;
-	trap.y = y;
-
-	board.place( trap );
+	board.place( this );
 };
