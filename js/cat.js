@@ -1,55 +1,55 @@
-function cat (x,y) {
+function Cat(x,y) {
 	this.symbol = '&#9773;';
-	this.type = 'cat';
+	this.type = 'Cat';
 	this.x = x;
 	this.y = y;
 	this.timer = null;
 	this.fatal = true;
-
-	board.place( this );
 };
 
-// @TODO: chris - please make the cat smarter.
-cat.move = function ( kitty, tried ) {
-	//determine distance
+// @TODO: chris - please make the Cat smarter.
+Cat.prototype.move = function (kitty, tried) {
+	// Determine distance
 	distX = mouse.x - kitty.x;
 	distY = mouse.y - kitty.y;
-	if ( ( Math.abs(distX) > Math.abs(distY) ) && distX != 0 ){//horizontal distance greater - move horizontally
+
+	// Horizontal distance greater - move horizontally
+	if ((Math.abs(distX) > Math.abs(distY)) && distX != 0) {
 		if (distX > 0){
-			if ( !game.move( kitty, 'right' ) ) {
+			if (!game.move(kitty, 'right')) {
 				if (distY > 0){
-					game.move( kitty, 'up' );
+					game.move(kitty, 'up');
 				} else {
-					game.move( kitty, 'down' );
+					game.move(kitty, 'down');
 				}
 			}
 		} else {
-			if ( !game.move( kitty, 'left' ) ) {
+			if (!game.move(kitty, 'left')) {
 				if (distY > 0){
-					game.move( kitty, 'up' );
+					game.move(kitty, 'up');
 				} else {
-					game.move( kitty, 'down' );
+					game.move(kitty, 'down');
 				}
 			}
 		}
 		return;
 	}
 
-	if ( Math.abs(distX) < Math.abs(distY) && distY != 0 ) {//vertical distance greater - move vertically
+	if (Math.abs(distX) < Math.abs(distY) && distY != 0) { // Vertical distance greater - move vertically
 		if (distY > 0){
-			if ( !game.move( kitty, 'up' ) ) {
+			if (!game.move(kitty, 'up')) {
 				if (distX > 0){
-					game.move( kitty, 'right' );
+					game.move(kitty, 'right');
 				} else {
-					game.move( kitty, 'left' );
+					game.move(kitty, 'left');
 				}
 			}
 		} else {
-			if ( !game.move( kitty, 'down' ) ) {
+			if (!game.move(kitty, 'down')) {
 				if (distX > 0){
-					game.move( kitty, 'right' );
+					game.move(kitty, 'right');
 				} else {
-					game.move( kitty, 'left' );
+					game.move(kitty, 'left');
 				}
 			}
 		}
@@ -59,18 +59,18 @@ cat.move = function ( kitty, tried ) {
 	* At this point, we're assuming they're 
 	* not on top of each other - collide handles that
 	*/
-	if ( distX != 0 && distY != 0 ) { 
+	if (distX != 0 && distY != 0) { 
 		if (distX > 0){
 			if (distY > 0){
-				game.move( kitty, 'upright' );
+				game.move(kitty, 'upright');
 			} else {
-				game.move( kitty, 'downright' );
+				game.move(kitty, 'downright');
 			}
 		} else {
 			if (distY > 0){
-				game.move( kitty, 'upleft' );
+				game.move(kitty, 'upleft');
 			} else {
-				game.move( kitty, 'downleft' );
+				game.move(kitty, 'downleft');
 			}
 		}
 

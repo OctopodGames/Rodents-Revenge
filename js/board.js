@@ -1,50 +1,54 @@
-var board = {};
-
-/* function to create board
-/* renamed and added parameters to create
-/* a function that we can reuse later */
-board.init = function( rows, columns ){
-	var myboard='';
-	board.rows = rows;
-	board.columns = columns;
-	board.squares = new Array; //holds multi-dimensional array of squares
-
-	for(i = rows-1; i >= 0; i--){
-		myboard+="<div class='row' id='row"+i+"'>";
-		for( j = 0; j <= columns-1; j++ ){
-			myboard+="<div class='cell' id='c"+j+"r"+i+"'></div>";
-		}
-		myboard+="</div>";
-	}
-	for( i = 0; i <= columns-1; i++ ){
-		board.squares[i] = new Array;
-		for( j = rows-1; j >= 0; j-- ){
-			board.squares[ i ][ j ] = null;
-		}
-		myboard+="</div>";
-	}
-
-	$('#board').html( myboard );
+function Board(rows, columns) {
+	this.rows = rows;
+	this.columns = columns;
+	this.squares = [];
 }
 
-board.place = function( object ) {
-	$( '#c' + object.x + 'r' + object.y ).html( object.symbol );
-	board.squares[object.x][object.y] = object.type;
+Board.prototype.draw = function() {
+	var self = this;
+	var newBoard='';
+
+	for (var i = self.rows-1; i >= 0; i--) {
+		newBoard += "<div class='row' id='row"+i+"'>";
+		for (var j = 0; j <= self.columns-1; j++) {
+			newBoard+="<div class='cell' id='c"+j+"r"+i+"'></div>";
+		}
+		newBoard += "</div>";
+	}
+
+	for (var i = 0; i <= self.columns-1; i++) {
+		board.squares[i] = [];
+
+		for (var j = self.rows-1; j >= 0; j--) {
+			board.squares[i][j] = null;
+		}
+
+		newBoard+="</div>";
+	}
+
+	$('#board').html(newBoard);
 }
 
-board.remove = function( x, y ) {
-	$( '#c' + x + 'r' + y ).html( '' );
+Board.prototype.place = function(object) {
+	$('#c' + object.x + 'r' + object.y).html(object.symbol);
+	board.squares[object.x][object.y] = object;
+}
+
+Board.prototype.remove = function(x, y) {
+	$('#c' + x + 'r' + y).html('');
 	board.squares[x][y] = null;
 }
 
-board.getSquare = function( x, y, direction ) {
-	var square = new Array;
+Board.prototype.getSquare = function(x, y, direction) {
+	var self = this;
+	var square = [];
 	newX = x;
 	newY = y;
+
 	// -1, -1 means cannot move in that direction - met a board edge
-	switch ( direction ) {
+	switch (direction) {
 		case 'left':
-		if ( 0 == x ) {
+		if (0 == x) {
 			newX = -1;
 			newY = -1;
 		} else {
@@ -53,7 +57,7 @@ board.getSquare = function( x, y, direction ) {
 		break;
 
 		case 'up':
-		if (  (this.rows - 1) == y ) {
+		if ((self.rows - 1) == y) {
 			newX = -1;
 			newY = -1;
 		} else {
@@ -62,7 +66,7 @@ board.getSquare = function( x, y, direction ) {
 		break;
 
 		case 'right':
-		if ( (this.columns - 1) == x ) {
+		if ((self.columns - 1) == x) {
 			newX = -1;
 		} else {
 			newX = x + 1;
@@ -70,7 +74,7 @@ board.getSquare = function( x, y, direction ) {
 		break;
 
 		case 'down':
-		if ( 0 == y ) {
+		if (0 == y) {
 			newX = -1;
 		} else {
 			newY = y - 1;
@@ -78,7 +82,7 @@ board.getSquare = function( x, y, direction ) {
 		break;
 
 		case 'upleft':
-		if (  (this.rows - 1) == y || x == 0) {
+		if ((self.rows - 1) == y || x == 0) {
 			newX = -1;
 		} else {
 			newX = x - 1;
@@ -87,7 +91,7 @@ board.getSquare = function( x, y, direction ) {
 		break;
 
 		case 'upright':
-		if (  (this.rows - 1) == y ) {
+		if ((self.rows - 1) == y) {
 			newX = -1;
 		} else {
 			newX = x + 1;
@@ -96,7 +100,7 @@ board.getSquare = function( x, y, direction ) {
 		break;
 
 		case 'downleft':
-		if ( 0 == y ) {
+		if (0 == y) {
 			newX = -1;
 		} else {
 			newX = x - 1;
@@ -105,7 +109,7 @@ board.getSquare = function( x, y, direction ) {
 		break;
 
 		case 'downright':
-		if ( 0 == y ) {
+		if (0 == y) {
 			newX = -1;
 		} else {
 			newX = x + 1;
@@ -113,10 +117,9 @@ board.getSquare = function( x, y, direction ) {
 		}
 		break;
 	}
-	square = new Array(newX, newY);
+	square = [newX, newY];
 	return square;
 }
-
 
 /* @TODO: need a way to know where all the things are
 /* I addes an array to hold square contents and added 
