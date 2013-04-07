@@ -5,9 +5,13 @@ function Yarn(x, y) {
 	this.movable = true;
 	this.timer = null;
 	this.fatal = true;
-};
+}
 
-// @TODO: please make the yarn smarter.
-Yarn.prototype.move = function() {
-	//game.move( yarn, 'right' );
+Yarn.prototype = {
+	constructor: Yarn,
+	
+	// @TODO: please make yarn smarter.
+	move: function() {
+		//game.move(yarn, 'right');
+	}
 }
