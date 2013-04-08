@@ -1,13 +1,12 @@
-function Cat(x,y) {
+var Cat = function Cat(x,y) {
 	this.symbol = '&#9773;';
 	this.type = 'Cat';
 	this.x = x;
 	this.y = y;
 	this.timer = null;
 	this.fatal = true;
-};
+}
 
-// @TODO: chris - please make the Cat smarter.
 Cat.prototype = {
 	constructor: Cat,
 
@@ -80,6 +79,4 @@ Cat.prototype = {
 		}
 		return;
 	}
-};
-
-
+}

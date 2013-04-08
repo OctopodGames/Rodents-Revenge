@@ -1,4 +1,4 @@
-function Mouse(x, y) {
+var Mouse = function Mouse(x, y) {
 	this.symbol = '&#9765;';
 	this.movable = true;
 	this.x = 5;

@@ -1,4 +1,4 @@
-function SinkHole(x,y) {
+var SinkHole = function SinkHole(x,y) {
 	this.symbol = '&#9732';
 	this.movable = false;
 	this.x = x;

@@ -1,4 +1,4 @@
-function Board(rows, columns) {
+var Board = function Board(rows, columns) {
 	this.rows = rows;
 	this.columns = columns;
 	this.squares = [];
@@ -6,7 +6,7 @@ function Board(rows, columns) {
 
 Board.prototype = {
 	constructor: Board,
-
+	
 	draw: function() {
 		var self = this;
 		var newBoard='';

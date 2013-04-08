@@ -9,7 +9,7 @@ var key = {
   d: 68
 }
 
-function Game() {
+var Game = function Game() {
   this.mouse = {};
   this.board = {};
   this.cats = [];
@@ -24,95 +24,100 @@ Game.prototype = {
 	constructor: Game,
 	
 	start: function(number) {
-  	this.readLevel(number);
-	  this.clock = setInterval("this.timer()", 1500);
-	  $(document).keydown(this.handleKey);
+		this.loadLevel(number);
+		//this.clock = setInterval("this.timer()", 1500);
+		$(document).keydown(this.handleKey);
 	},
+	
+	loadLevel: function(number) {
+		var self = this;
 
-	readLevel: function(number) {
-  	var self = this;
+		//get the requested level file
+		$.getJSON('levels/level'+number+'.json', function(level) {
+			// Create the board
+		  self.board = new Board(level.board.columns, level.board.rows);
 
-	  //get the requested level file
-	  $.getJSON('levels/level'+number+'.json', function(level) {
-	    console.log(level);
+			// Create the mouse
+		  self.mouse = new Mouse(level.mouse.x, level.mouse.y);
 
-  	  //set the grid size
-	    self.board = new Board(level.board.columns, level.board.rows);
+		  // Create the cats
+		  $.each(level.cats, function() {
+		    self.cats.push(new Cat(this[0], this[1]));
+		  });
 
-	    //set the mouse starting place
-	    self.mouse = new Mouse(level.mouse.x, level.mouse.y);
+		  // Create the blocks
+		  $.each(level.blocks, function() {
+		    self.blocks.push(new Block(this[0], this[1]));
+		  });
 
-	    //cat positions
-	    $.each(level.cats, function() {
-	      self.cats.push(new Cat(this[0], this[1]));
-	    });
+		  // Create the rocks
+		  $.each(level.rocks, function() {
+		    self.rocks.push(new Rock(this[0], this[1]));
+		  });
 
-	    //block positions
-	    $.each(level.blocks, function() {
-	      self.blocks.push(new Block(this[0], this[1]));
-	    });
+			// Create the yarn
+			$.each(level.yarns, function() {
+				self.yarns.push(new Yarn(this[0], this[1]));
+			});
 
-	    //rock positions
-	    $.each(level.rocks, function() {
-	      self.rocks.push(new Rock(this[0], this[1]));
-	    });
+		  // Create the traps
+		  $.each(level.traps, function() {
+		    self.traps.push(new Trap(this[0], this[1]));
+		  });
 
-	    //trap positions
-	    $.each(level.traps, function() {
-	      self.traps.push(new Trap(this[0], this[1]));
-	    });
-
-	    //hole positions
-	    $.each(level.holes, function() {
-	      self.holes.push(new SinkHole(this[0], this[1]));
-	    }); 
-	  });
+		  // Create the sinkholes
+		  $.each(level.holes, function() {
+		    self.holes.push(new SinkHole(this[0], this[1]));
+		  }); 
+		});
+		
+		console.log(self);
 	},
-
+	
 	handleKey: function(e) {
-	  var self = this;
+		var self = this;
 
-  	if (self.mouse.movable == false){
-	    return;
-	  }
-	  switch (e.keyCode) {
-	    case key.left:
-	    case key.a:
-	      self.move(self.mouse, 'left');
-	      break;
+		if (self.mouse.movable == false){
+		  return;
+		}
+		switch (e.keyCode) {
+		  case key.left:
+		  case key.a:
+		    self.move(self.mouse, 'left');
+		    break;
 
-	    case key.up:
-	    case key.w:
-	      self.move(self.mouse, 'up');
-	      break;
+		  case key.up:
+		  case key.w:
+		    self.move(self.mouse, 'up');
+		    break;
 
-	    case key.right:
-	    case key.d:
-	      self.move(self.mouse, 'right');
-	      break;
+		  case key.right:
+		  case key.d:
+		    self.move(self.mouse, 'right');
+		    break;
 
-  	  case key.down:
-	    case key.s:
-	      self.move(self.mouse, 'down');
-	      break;
-	  }
+			case key.down:
+		  case key.s:
+		    self.move(self.mouse, 'down');
+		    break;
+		}
 	},
-
+	
 	timer: function() {
 		var self = this;
 
 		//timed automatic moving of cats/yarn - game.end stops it
 		$.each(self.cats, function() {
-		  this.move(this);
+			this.move(this);
 		});
 		$.each(self.yarns, function() {
-		  this.move(this);
+			this.move(this);
 		});
 	},
 
 	end: function() {
-		/* stops cats moving after game ends - we'll need one for yarn too!
-		// @TODO: should be a foreach..but we're not there yet */
+		// stops cats moving after game ends - we'll need one for yarn too!
+		// @TODO: should be a foreach..but we're not there yet
 
 		// @TODO: the following line never returns. Something's broke.
 		clearInterval(game.clock); 
@@ -123,73 +128,73 @@ Game.prototype = {
 		var self = this;
 
 		if (self.mouse.lives > 0){
-		  var keepX = who.x;
-		  var keepY = who.y;
-		  if (who.type === 'player') { 
-		    // I'm going to use this for game.shoveBlockChain
-		    // since I don't want to pass direction through two functions
-		    who.direction = direction;
-		  }  
+			var keepX = who.x;
+			var keepY = who.y;
+			if (who.type === 'player') { 
+			  // I'm going to use this for game.shoveBlockChain
+			  // since I don't want to pass direction through two functions
+			  who.direction = direction;
+			}  
 
-		  newSquare = self.board.getSquare(who.x, who.y, direction);
-		  var newX = newSquare[0];
-		  var newY = newSquare[1];
+			newSquare = self.board.getSquare(who.x, who.y, direction);
+			var newX = newSquare[0];
+			var newY = newSquare[1];
 
-		  if (newX == -1) {
-		    // dont move...hit an edge
-		    return false;    
-		  } else if (board.squares[newX][newY] !== null) {
-		    // collision...decide result
-		    if (this.collide(who, newX, newY)) {
-		      // Immobile obstruction. Don't move
-		      return false;
-		    }
-		  }
-		  // OK to move
-		  who.x = newX;
-		  who.y = newY;
-		  board.remove(keepX, keepY);
-		  board.place(who);
-		  return true;  
+			if (newX == -1) {
+			  // dont move...hit an edge
+			  return false;    
+			} else if (board.squares[newX][newY] !== null) {
+			  // collision...decide result
+			  if (this.collide(who, newX, newY)) {
+			    // Immobile obstruction. Don't move
+			    return false;
+			  }
+			}
+			// OK to move
+			who.x = newX;
+			who.y = newY;
+			board.remove(keepX, keepY);
+			board.place(who);
+			return true;  
 		}  
 	},
 
 	collide: function(movedObj, x, y) {
 		// @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
 		if (movedObj.type === 'player') {
-		  switch (board.squares[x][y]) {
-		    case 'cat':
-		    case 'yarn':
-		      mouse.die();
-		      return true;   //don't execute move, next mouse re-appeared in safe zone.
-		      break;
-		    case 'sinkhole':
-		      mouse.stuck(x, y);  //Mouse is stuck for ten cat turns
-		      return false;  
-		      break;
-		      case 'trap':
-		        mouse.die();
-		        board.remove(x, y);   //remove trap from board
-		      return true;
-		    case 'block':
-		    if (this.shoveBlockChain(x, y)) {
-		      return false;
-		    } else {
-		      return true;
-		    }
-		    break;
-		    case 'rock':
-		      return true;
-		      break;
-		  }
+			switch (board.squares[x][y]) {
+			  case 'cat':
+			  case 'yarn':
+			    mouse.die();
+			    return true;   //don't execute move, next mouse re-appeared in safe zone.
+			    break;
+			  case 'sinkhole':
+			    mouse.stuck(x, y);  //Mouse is stuck for ten cat turns
+			    return false;  
+			    break;
+			    case 'trap':
+			      mouse.die();
+			      board.remove(x, y);   //remove trap from board
+			    return true;
+			  case 'block':
+			  if (this.shoveBlockChain(x, y)) {
+			    return false;
+			  } else {
+			    return true;
+			  }
+			  break;
+			  case 'rock':
+			    return true;
+			    break;
+			}
 		}
 		// if a cat or yarnball hits the mouse, it dies. Those are the only other active objects
 		if (board.squares[x][y] === 'player') {
-		  mouse.die();
-		  return false;  // no collision - mouse died, OK to move
+			mouse.die();
+			return false;  // no collision - mouse died, OK to move
 		} else {
-		  // cat or yarn bounced into something else
-		  return true;
+			// cat or yarn bounced into something else
+			return true;
 		}
 	},
 
@@ -197,12 +202,12 @@ Game.prototype = {
 		//find the end of the chain of blocks & check for obstruction
 		results = this.findChainEnd(x, y);
 		if (results[0] == false){
-		  // the chain of blocks is obstructed - can't move
-		  return false;
+			// the chain of blocks is obstructed - can't move
+			return false;
 		}
 		if (results[1] === 'sinkhole'){
-		  //um, just obliterate them with the mouse character
-		  return true;
+			//um, just obliterate them with the mouse character
+			return true;
 		}
 		// add block at chain end. Then let normal mouse move obliterate closest block
 		x = results[2];
@@ -217,9 +222,9 @@ Game.prototype = {
 		var newSquare = new Array;
 
 		while(board.squares[x][y] === 'block'){
-		  newSquare = board.getSquare(x, y, mouse.direction);
-		  x = newSquare[0];
-		  y = newSquare[1];
+			newSquare = board.getSquare(x, y, mouse.direction);
+			x = newSquare[0];
+			y = newSquare[1];
 		}
 
 		chainEnd[0] = true;
@@ -228,27 +233,27 @@ Game.prototype = {
 
 		// x,y now points to whatever is at the end
 		if (board.squares[x][y]) {
-		  // not null, so something other than space
-		  // @TODO: Here is where we really need the object map
-		  //      We need to be able to tell if something is movable or not
-		  //      and we can't until we can query a particular object
-		  // @TODO: Someone else should probably figure out how to move
-		  //      non-block objects at the end of a block chain
-		  switch (board.squares[x][y]) {
-		    //non-movable
-		    case 'trap':
-		    case 'rock':
-		      chainEnd[0] = false;
-		      return chainEnd;
-		      break;
+			// not null, so something other than space
+			// @TODO: Here is where we really need the object map
+			//      We need to be able to tell if something is movable or not
+			//      and we can't until we can query a particular object
+			// @TODO: Someone else should probably figure out how to move
+			//      non-block objects at the end of a block chain
+			switch (board.squares[x][y]) {
+			  //non-movable
+			  case 'trap':
+			  case 'rock':
+			    chainEnd[0] = false;
+			    return chainEnd;
+			    break;
 
-		    // for now, cat and yarn ball icons are erased by blocks. Oops.
-		    case 'sinkhole':
-		      chainEnd[1] = 'sinkhole';
-		      break;
-		  }
+			  // for now, cat and yarn ball icons are erased by blocks. Oops.
+			  case 'sinkhole':
+			    chainEnd[1] = 'sinkhole';
+			    break;
+			}
 		} else {
-		  chainEnd[1] = 'space';
+			chainEnd[1] = 'space';
 		}
 		return chainEnd;
 	}

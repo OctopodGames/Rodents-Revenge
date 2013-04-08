@@ -1,4 +1,4 @@
-function Yarn(x, y) {
+var Yarn = function Yarn(x, y) {
 	this.x = x;
 	this.y = y;
 	this.symbol = '&#9991;';

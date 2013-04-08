@@ -1,4 +1,4 @@
-function Cheese(x,y) {
+var Cheese = function Cheese(x,y) {
 	this.symbol = '&#9744;';
 	this.movable = true;
 	this.x = x;
