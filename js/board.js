@@ -9,7 +9,7 @@ Board.prototype = {
 	
 	draw: function() {
 		var self = this;
-		var newBoard='';
+		var newBoard = "";
 
 		for (var i = self.rows-1; i >= 0; i--) {
 			newBoard += "<div class='row' id='row"+i+"'>";
@@ -20,10 +20,10 @@ Board.prototype = {
 		}
 
 		for (var i = 0; i <= self.columns-1; i++) {
-			board.squares[i] = [];
+			self.squares[i] = [];
 
 			for (var j = self.rows-1; j >= 0; j--) {
-				board.squares[i][j] = null;
+				self.squares[i][j] = null;
 			}
 
 			newBoard+="</div>";
@@ -34,7 +34,7 @@ Board.prototype = {
 
 	place: function(object) {
 		$('#c' + object.x + 'r' + object.y).html(object.symbol);
-		board.squares[object.x][object.y] = object;
+		this.squares[object.x][object.y] = object;
 	},
 
 	remove: function(x, y) {
