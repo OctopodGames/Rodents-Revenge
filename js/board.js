@@ -6,7 +6,7 @@ var Board = function Board(rows, columns) {
 
 Board.prototype = {
 	constructor: Board,
-	
+
 	draw: function() {
 		var self = this;
 		var newBoard = "";
@@ -23,7 +23,7 @@ Board.prototype = {
 			self.squares[i] = [];
 
 			for (var j = self.rows-1; j >= 0; j--) {
-				self.squares[i][j] = null;
+				self.squares[i][j] = { occupant: null };
 			}
 
 			newBoard+="</div>";
@@ -34,12 +34,12 @@ Board.prototype = {
 
 	place: function(object) {
 		$('#c' + object.x + 'r' + object.y).html(object.symbol);
-		this.squares[object.x][object.y] = object;
+		this.squares[object.x][object.y].occupant = object;
 	},
 
 	remove: function(x, y) {
 		$('#c' + x + 'r' + y).html('');
-		board.squares[x][y] = null;
+		board.squares[x][y].occupant;
 	},
 
 	getSquare: function(x, y, direction) {
@@ -126,5 +126,5 @@ Board.prototype = {
 };
 
 /* @TODO: need a way to know where all the things are
-/* I addes an array to hold square contents and added 
-/* placement/removal to the .place and .remove functions - SJP */ 
+/* I addes an array to hold square contents and added
+/* placement/removal to the .place and .remove functions - SJP */
