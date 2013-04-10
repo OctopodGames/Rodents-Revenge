@@ -1,14 +1,34 @@
-var Cat = function Cat(x,y) {
+"use strict";
+
+var Cat = function Cat(x, y, game) {
   this.symbol = '&#9773;';
-  this.type = 'Cat';
   this.x = x;
   this.y = y;
   this.timer = null;
   this.fatal = true;
+	this.eventListeners = [];
+
+	this.addEventListener(game);
 }
 
 Cat.prototype = {
   constructor: Cat,
+
+	addEventListener: function(object) {
+		this.eventListeners.push(object);
+	},
+
+	removeEventListener: function(object) {
+		this.eventListener.splice(this.eventListeners.indexOf(object), 1);
+	},
+
+	raiseEvent: function(e) {
+		var self = this;
+
+		$.each(self.eventListeners, function() {
+			
+		});
+	},
 
   move: function(kitty, tried) {
     // Determine distance

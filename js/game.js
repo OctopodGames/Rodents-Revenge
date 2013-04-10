@@ -1,3 +1,5 @@
+"use strict";
+
 var key = {
   left: 37,
   up: 38,
@@ -10,6 +12,8 @@ var key = {
 }
 
 var Game = function Game() {
+	this.gameOn = true;
+
   this.mouse = {};
   this.board = {};
   this.cats = [];
@@ -41,34 +45,34 @@ Game.prototype = {
       async: false,
       success: function(level) {
         // Create the board
-        self.board = new Board(level.board.x, level.board.y);
+        self.board = new Board(level.board.x, level.board.y, self);
 
         // Create the mouse
-        self.mouse = new Mouse(level.mouse.x, level.mouse.y);
+        self.mouse = new Mouse(level.mouse.x, level.mouse.y, self)
 
         // Create the cats
         $.each(level.cats, function() {
-          self.cats.push(new Cat(this[0], this[1]));
+          self.cats.push(new Cat(this[0], this[1], self));
         });
 
         // Create the blocks
         $.each(level.blocks, function() {
-          self.blocks.push(new Block(this[0], this[1]));
+          self.blocks.push(new Block(this[0], this[1], self));
         });
 
         // Create the rocks
         $.each(level.rocks, function() {
-          self.rocks.push(new Rock(this[0], this[1]));
+          self.rocks.push(new Rock(this[0], this[1], self));
         });
 
         // Create the traps
         $.each(level.traps, function() {
-          self.traps.push(new Trap(this[0], this[1]));
+          self.traps.push(new Trap(this[0], this[1], self));
         });
 
         // Create the sinkholes
         $.each(level.sinkholes, function() {
-          self.sinkholes.push(new SinkHole(this[0], this[1]));
+          self.sinkholes.push(new SinkHole(this[0], this[1], self));
         });
       }
     });
@@ -155,7 +159,7 @@ Game.prototype = {
     if (self.mouse.lives > 0){
       var keepX = who.x;
       var keepY = who.y;
-      if (who.type === 'player') { 
+      if (who instanceof Mouse) { 
         // I'm going to use this for game.shoveBlockChain
         // since I don't want to pass direction through two functions
         who.direction = direction;

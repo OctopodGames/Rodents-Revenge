@@ -1,4 +1,7 @@
-var SinkHole = function SinkHole(x,y) {
+"use strict";
+
+var SinkHole = function SinkHole(x, y, game) {
+	this.game = game;
   this.symbol = '&#9732';
   this.movable = false;
   this.x = x;

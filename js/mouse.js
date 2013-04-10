@@ -1,4 +1,7 @@
-var Mouse = function Mouse(x, y) {
+"use strict";
+
+var Mouse = function Mouse(x, y, game) {
+	this.game = game;
   this.symbol = '&#9765;';
   this.movable = true;
   this.x = 5;

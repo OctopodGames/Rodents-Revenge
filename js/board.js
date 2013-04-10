@@ -1,4 +1,7 @@
-var Board = function Board(rows, columns) {
+"use strict";
+
+var Board = function Board(rows, columns, game) {
+	this.game = game;
   this.rows = rows;
   this.columns = columns;
   this.squares = [];
@@ -11,6 +14,7 @@ Board.prototype = {
     var self = this;
     var newBoard = "";
 
+		// Define DOM grid
     for (var i = self.rows-1; i >= 0; i--) {
       newBoard += "<div class='row' id='row"+i+"'>";
       for (var j = 0; j <= self.columns-1; j++) {
@@ -19,9 +23,10 @@ Board.prototype = {
       newBoard += "</div>";
     }
 
+		// Define logical grid
     for (var i = 0; i <= self.columns-1; i++) {
       self.squares[i] = [];
-
+	
       for (var j = self.rows-1; j >= 0; j--) {
         self.squares[i][j] = null;
       }
@@ -32,9 +37,9 @@ Board.prototype = {
     $('#board').html(newBoard);
   },
 
-  place: function(object) {
-    $('#c' + object.x + 'r' + object.y).html(object.symbol);
-    this.squares[object.x][object.y] = object;
+  place: function(entity) {
+    $('#c' + entity.x + 'r' + entity.y).html(entity.symbol);
+    this.squares[entity.x][entity.y] = entity;
   },
 
   remove: function(x, y) {

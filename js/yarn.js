@@ -1,4 +1,7 @@
-var Yarn = function Yarn(x, y) {
+"use strict";
+
+var Yarn = function Yarn(x, y, game) {
+	this.game = game;
   this.x = x;
   this.y = y;
   this.symbol = '&#9991;';
