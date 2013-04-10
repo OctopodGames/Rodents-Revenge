@@ -22,15 +22,15 @@ var Game = function Game() {
 
 Game.prototype = {
   constructor: Game,
-  
+
   start: function(number) {
-    
+
     this.loadLevel(0);
     this.placeObjects();
     //this.clock = setInterval("this.timer()", 1500);
     //$(document).keydown(this.handleKey);
   },
-  
+
   loadLevel: function(number) {
     var self = this;
 
@@ -73,13 +73,13 @@ Game.prototype = {
       }
     });
   },
-  
+
   placeObjects: function() {
     var self = this;
-  
+
     // Draw board
     self.board.draw();
-    
+
     // Place objects on board
     self.board.place(this.mouse); // Place mouse
     $.each(self.cats, function() { // Place cats
@@ -98,7 +98,7 @@ Game.prototype = {
       self.board.place(this);
     });
   },
-  
+
   handleKey: function(e) {
     var self = this;
 
@@ -127,7 +127,7 @@ Game.prototype = {
         break;
     }
   },
-  
+
   timer: function() {
     var self = this;
 
@@ -145,7 +145,7 @@ Game.prototype = {
     // @TODO: should be a foreach..but we're not there yet
 
     // @TODO: the following line never returns. Something's broke.
-    clearInterval(game.clock); 
+    clearInterval(game.clock);
     alert("Loser!");
   },
 
@@ -155,11 +155,11 @@ Game.prototype = {
     if (self.mouse.lives > 0){
       var keepX = who.x;
       var keepY = who.y;
-      if (who.type === 'player') { 
+      if (who.type === 'player') {
         // I'm going to use this for game.shoveBlockChain
         // since I don't want to pass direction through two functions
         who.direction = direction;
-      }  
+      }
 
       newSquare = self.board.getSquare(who.x, who.y, direction);
       var newX = newSquare[0];
@@ -167,8 +167,8 @@ Game.prototype = {
 
       if (newX == -1) {
         // dont move...hit an edge
-        return false;    
-      } else if (board.squares[newX][newY] !== null) {
+        return false;
+      } else if (board.squares[newX][newY].occupant !== null) {
         // collision...decide result
         if (this.collide(who, newX, newY)) {
           // Immobile obstruction. Don't move
@@ -180,14 +180,14 @@ Game.prototype = {
       who.y = newY;
       board.remove(keepX, keepY);
       board.place(who);
-      return true;  
-    }  
+      return true;
+    }
   },
 
   collide: function(movedObj, x, y) {
     // @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
     if (movedObj.type === 'player') {
-      switch (board.squares[x][y]) {
+      switch ( board.squares[x][y].occupant ) {
         case 'cat':
         case 'yarn':
           mouse.die();
@@ -195,7 +195,7 @@ Game.prototype = {
           break;
         case 'sinkhole':
           mouse.stuck(x, y);  //Mouse is stuck for ten cat turns
-          return false;  
+          return false;
           break;
           case 'trap':
             mouse.die();
@@ -214,7 +214,7 @@ Game.prototype = {
       }
     }
     // if a cat or yarnball hits the mouse, it dies. Those are the only other active objects
-    if (board.squares[x][y] === 'player') {
+    if (board.squares[x][y].occupant === 'player') {
       mouse.die();
       return false;  // no collision - mouse died, OK to move
     } else {
@@ -246,7 +246,7 @@ Game.prototype = {
     var chainEnd = new Array;
     var newSquare = new Array;
 
-    while(board.squares[x][y] === 'block'){
+    while(board.squares[x][y].occupant === 'block'){
       newSquare = board.getSquare(x, y, mouse.direction);
       x = newSquare[0];
       y = newSquare[1];
@@ -257,14 +257,14 @@ Game.prototype = {
     chainEnd[3] = y;
 
     // x,y now points to whatever is at the end
-    if (board.squares[x][y]) {
+    if (board.squares[x][y].occupant) {
       // not null, so something other than space
       // @TODO: Here is where we really need the object map
       //      We need to be able to tell if something is movable or not
       //      and we can't until we can query a particular object
       // @TODO: Someone else should probably figure out how to move
       //      non-block objects at the end of a block chain
-      switch (board.squares[x][y]) {
+      switch (board.squares[x][y].occupant) {
         //non-movable
         case 'trap':
         case 'rock':
