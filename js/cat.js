@@ -1,5 +1,5 @@
 var Cat = function Cat(x,y) {
-  this.symbol = '&#9773;';
+  this.symbol = 'cat.gif';
   this.type = 'Cat';
   this.x = x;
   this.y = y;

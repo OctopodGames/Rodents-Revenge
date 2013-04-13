@@ -33,8 +33,8 @@ Board.prototype = {
   },
 
   place: function(object) {
-		if(object.symbol.substring(-4) =='.'){
-			$('#c' + object.x + 'r' + object.y).html("<img src='"+object.symbol+"'/>");
+		if(object.symbol.substring(0,1) !='&'){
+			$('#c' + object.x + 'r' + object.y).html('<img src= "img/' + object.symbol + '"/>');
 		}else{
 			$('#c' + object.x + 'r' + object.y).html(object.symbol);
 		}
