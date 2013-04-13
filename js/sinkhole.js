@@ -1,5 +1,5 @@
 var SinkHole = function SinkHole(x,y) {
-  this.symbol = '&#9732';
+  this.symbol = 'sinkhole.gif';
   this.movable = false;
   this.x = x;
   this.y = y;

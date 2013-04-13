@@ -1,5 +1,5 @@
 var Mouse = function Mouse(x, y) {
-  this.symbol = '&#9765;';
+  this.symbol = 'mouse.gif';
   this.movable = true;
   this.x = 5;
   this.y = 3;
@@ -22,7 +22,7 @@ Mouse.prototype = {
       this.x = 5;
       this.y = 5;
       mouse.movable = true;       //reset in case mouse was stuck in a sinkhole
-      this.symbol = '&#9765;';   //reset in case mouse was stuck in a sinkhole
+      this.symbol = 'mouse.gif';   //reset in case mouse was stuck in a sinkhole
       board.place(mouse);
     }
   },
@@ -37,7 +37,7 @@ Mouse.prototype = {
     alert( 'Mouse is stuck for ten turns!');
     setTimeout(function() { 
       mouse.movable = true; 
-      mouse.symbol = '&#9765;';
+      mouse.symbol = 'mouse.gif';
       //alert('Mouse is free');
       board.place( mouse );
     }, 5000);
