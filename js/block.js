@@ -1,5 +1,5 @@
 var Block = function Block(x,y) {
-  this.symbol = 'block.gif';
+  this.symbol = '&#9744;';
   this.movable = true;
   this.x = x;
   this.y = y;

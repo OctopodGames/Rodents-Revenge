@@ -6,14 +6,14 @@ var key = {
   w: 87,
   a: 65,
   s: 83,
-  d: 68
+  d: 68,    n: 78    // temp cheat code to load level 1
 }
 
 var Game = function Game() {
   this.mouse = {};
   this.board = {};
   this.cats = [];
-  this.yarns = [];
+  this.yarn = [];
   this.blocks = [];
   this.rocks = [];
   this.traps = [];
@@ -23,17 +23,14 @@ var Game = function Game() {
 Game.prototype = {
   constructor: Game,
   
-  start: function(number) {
-	
-	this.loadLevel(0);
-	this.placeObjects();
+  start: function(number) {	this.newLevel(number);
+
 	//this.clock = setInterval("this.timer()", 1500);
 	$(document).keydown(this.handleKey);
   },
-  
+  newLevel: function(number) { 	var self = this;		// delete all the old stuff	self.clearLevel();		self.loadLevel(number);	self.placeObjects();  },
   loadLevel: function(number) {
-	var self = this;
-
+	var self = this;
 	/** Read in level objects from file **/
 	$.ajax({
 	  url: 'levels/level'+number+'.json',
@@ -70,22 +67,19 @@ Game.prototype = {
 		// Create the sinkholes
 		$.each(level.sinkholes, function() {
 		  self.sinkholes.push(new SinkHole(this[0], this[1]));
-		});
+		});				// Create the yarnballs		$.each(level.yarn, function() {		  self.yarn.push(new Yarn(this[0], this[1]));		});
 	  }
 	});
-  },
-  
+  },    
+ clearLevel: function(number) {	var self = this;	self.mouse = {};	self.board = {};	self.cats = [];	self.yarn = [];	self.blocks = [];	self.rocks = [];	self.traps = [];	self.sinkholes = [];	  },    
   placeObjects: function() {
 	var self = this;
-  
+    
 	// Draw board
 	self.board.draw();
 	
 	// Place objects on board
 	self.board.place(this.mouse); // Place mouse
-	$.each(self.cats, function() { // Place cats
-	  self.board.place(this);
-	});
 	$.each(self.blocks, function() { // Place blocks
 	  self.board.place(this);
 	});
@@ -97,8 +91,7 @@ Game.prototype = {
 	});
 	$.each(self.sinkholes, function() { // Place sinkholes
 	  self.board.place(this);
-	});
-  },
+	});	$.each(self.yarn, function() { // Place yarnballs	  self.board.place(this);	});		// This has a timer on it so that when the board loads	// the player has a chance to think about their move before	// our really fast cats attack. It's might not be a problem	// in the new OO version of the game.	setTimeout(function(){		$.each(self.cats, function() { // Place cats			self.board.place(this);					});			},500);},
   
   handleKey: function(e) {
   var self = document.game;
@@ -122,11 +115,7 @@ Game.prototype = {
 		self.move(self.mouse, 'right');
 		break;
 
-	  case key.down:
-	  case key.s:
-		self.move(self.mouse, 'down');
-		break;
-	}
+	  case key.down:	  case key.s:		self.move(self.mouse, 'down');		break;	  case key.n:		self.newLevel(1);		break;	}
   },
   
   timer: function() {
@@ -136,7 +125,7 @@ Game.prototype = {
 	$.each(self.cats, function() {
 	  this.move(this);
 	});
-	$.each(self.yarns, function() {
+	$.each(self.yarn, function() {
 	  this.move(this);
 	});
   },
