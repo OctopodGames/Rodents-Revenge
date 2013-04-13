@@ -1,7 +1,7 @@
 var Yarn = function Yarn(x, y) {
   this.x = x;
   this.y = y;
-  this.symbol = '&#9991;';
+  this.symbol = 'yarn.gif';
   this.movable = true;
   this.timer = null;
   this.fatal = true;

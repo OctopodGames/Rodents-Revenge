@@ -24,7 +24,7 @@
  width:60px;
  font-size: 3em;
 }
-
+.cell img {  height: 58px; width: 58px;}
 .cell:first-child {
  border-left:1px solid #000;
 }
