@@ -38,7 +38,7 @@ Board.prototype = {
   },
 
   place: function(entity) {
-    $('#c' + entity.x + 'r' + entity.y).html(entity.symbol);
+    $('#c' + entity.x + 'r' + entity.y).css("background-image", "url('img/" + entity.symbol + "')");
     this.squares[entity.x][entity.y] = entity;
   },
 
