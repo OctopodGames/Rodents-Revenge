@@ -2,13 +2,13 @@
 
 var Yarn = function Yarn(x, y, game) {
 	this.game = game;
+  this.symbol = 'yarn.gif';
   this.x = x;
   this.y = y;
-  this.symbol = '&#9991;';
   this.movable = true;
   this.timer = null;
   this.fatal = true;
-}
+};
 
 Yarn.prototype = {
   constructor: Yarn,
@@ -17,4 +17,4 @@ Yarn.prototype = {
   move: function() {
     //game.move(yarn, 'right');
   }
-}
+};

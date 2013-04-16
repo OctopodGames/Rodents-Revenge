@@ -7,4 +7,4 @@ var Cheese = function Cheese(x, y, game) {
   this.x = x;
   this.y = y;
   this.fatal = true;
-}
+};

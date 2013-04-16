@@ -1,15 +1,15 @@
 "use strict";
 
 var Mouse = function Mouse(x, y, game) {
-	this.game = game;
-  this.symbol = '&#9765;';
+  this.game = game;
+  this.symbol = 'mouse.gif';
   this.movable = true;
   this.x = 5;
   this.y = 3;
   this.lives = 3;
   this.direction = '';
   this.fatal = true;
-}
+};
 
 Mouse.prototype = {
   constructor: Mouse,

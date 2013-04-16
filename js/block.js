@@ -7,4 +7,4 @@ var Block = function Block(x, y, game) {
   this.x = x;
   this.y = y;
   this.fatal = false;
-}
+};

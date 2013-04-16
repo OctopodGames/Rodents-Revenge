@@ -1,7 +1,7 @@
 "use strict";
 
 var Cat = function Cat(x, y, game) {
-  this.symbol = '&#9773;';
+  this.symbol = 'cat.gif';
   this.x = x;
   this.y = y;
   this.timer = null;

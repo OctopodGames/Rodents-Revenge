@@ -5,7 +5,7 @@ var Board = function Board(rows, columns, game) {
   this.rows = rows;
   this.columns = columns;
   this.squares = [];
-}
+};
 
 Board.prototype = {
   constructor: Board,
@@ -132,4 +132,4 @@ Board.prototype = {
 
 /* @TODO: need a way to know where all the things are
 /* I addes an array to hold square contents and added 
-/* placement/removal to the .place and .remove functions - SJP */ 
+/* placement/removal to the .place and .remove functions - SJP */
