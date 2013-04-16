@@ -2,7 +2,7 @@
 
 var Yarn = function Yarn(x, y, game) {
 	this.game = game;
-  this.symbol = 'yarn.gif';
+  this.symbol = 'yarn.png';
   this.x = x;
   this.y = y;
   this.movable = true;

@@ -2,7 +2,7 @@
 
 var Mouse = function Mouse(x, y, game) {
   this.game = game;
-  this.symbol = 'mouse.gif';
+  this.symbol = 'mouse.png';
   this.movable = true;
   this.x = 5;
   this.y = 3;

@@ -2,7 +2,7 @@
 
 var Trap = function Trap(x, y, game) {
 	this.game = game;
-  this.symbol = 'trap.gif';
+  this.symbol = 'trap.png';
   this.movable = false;
   this.x = x;
   this.y = y;
