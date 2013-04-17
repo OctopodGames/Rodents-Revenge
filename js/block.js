@@ -1,7 +1,10 @@
-var Block = function Block(x,y) {
-  this.symbol = 'block.gif';
-  this.movable = true;
-  this.x = x;
-  this.y = y;
-  this.fatal = false;
-}
+"use strict";
+
+var Block = function Block(x, y, game) {
+	this.game = game;
+  this.symbol = 'block.png';
+  this.movable = true;
+  this.x = x;
+  this.y = y;
+  this.fatal = false;
+};
