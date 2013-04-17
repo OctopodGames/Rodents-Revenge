@@ -11,6 +11,7 @@ var key = {
   d: 68,
   n: 78 // temp cheat code to load level 1
 };
+
 var Game = function Game() {
   this.gameOn = true;
   this.mouse = {};
@@ -27,10 +28,13 @@ Game.prototype = {
   constructor: Game,
   
   start: function(number) {
+    var self = this;
+    
+    document.game = self; // Necessary to handle keydown events
     this.loadLevel(0);
     this.placeObjects();
     //this.clock = setInterval("this.timer()", 1500);
-    //$(document).keydown(this.handleKey);
+    $(document).keydown(self.handleKey);
   },
   
   loadLevel: function(number) {
@@ -41,30 +45,30 @@ Game.prototype = {
       dataType: "json",
       async: false,
       success: function(level) {
-      // Create the board
-      self.board = new Board(level.board.x, level.board.y, self);
-      // Create the mouse
-      self.mouse = new Mouse(level.mouse.x, level.mouse.y, self)
-      // Create the cats
-      $.each(level.cats, function() {
-        self.cats.push(new Cat(this[0], this[1], self));
-      });
-      // Create the blocks
-      $.each(level.blocks, function() {
-        self.blocks.push(new Block(this[0], this[1], self));
-      });
-      // Create the rocks
-      $.each(level.rocks, function() {
-        self.rocks.push(new Rock(this[0], this[1], self));
-      });
-      // Create the traps
-      $.each(level.traps, function() {
-        self.traps.push(new Trap(this[0], this[1], self));
-      });
-      // Create the sinkholes
-      $.each(level.sinkholes, function() {
-        self.sinkholes.push(new SinkHole(this[0], this[1], self));
-      });
+        // Create the board
+        self.board = new Board(level.board.x, level.board.y, self);
+        // Create the mouse
+        self.mouse = new Mouse(level.mouse.x, level.mouse.y, self)
+        // Create the cats
+        $.each(level.cats, function() {
+          self.cats.push(new Cat(this[0], this[1], self));
+        });
+        // Create the blocks
+        $.each(level.blocks, function() {
+          self.blocks.push(new Block(this[0], this[1], self));
+        });
+        // Create the rocks
+        $.each(level.rocks, function() {
+          self.rocks.push(new Rock(this[0], this[1], self));
+        });
+        // Create the traps
+        $.each(level.traps, function() {
+          self.traps.push(new Trap(this[0], this[1], self));
+        });
+        // Create the sinkholes
+        $.each(level.sinkholes, function() {
+          self.sinkholes.push(new SinkHole(this[0], this[1], self));
+        });
       }
     });
   },
@@ -106,29 +110,30 @@ Game.prototype = {
   },
   
   handleKey: function(e) {
-    var self = this;
+    var self = document.game;
+    
     if (self.mouse.movable == false) {
       return;
     }
     switch (e.keyCode) {
       case key.left:
       case key.a:
-        self.move(self.mouse, 'left');
+        self.move(self.mouse, 'west');
         break;
         
       case key.up:
       case key.w:
-        self.move(self.mouse, 'up');
+        self.move(self.mouse, 'north');
         break;
         
       case key.right:
       case key.d:
-        self.move(self.mouse, 'right');
+        self.move(self.mouse, 'east');
         break;
         
       case key.down:
       case key.s:
-        self.move(self.mouse, 'down');
+        self.move(self.mouse, 'south');
         break;
         
       case key.n:
@@ -138,53 +143,56 @@ Game.prototype = {
   },
   
   timer: function() {
-  var self = this;
-  //timed automatic moving of cats/yarn - game.end stops it
-  $.each(self.cats, function() {
-    this.move(this);
-  });
-  $.each(self.yarns, function() {
-    this.move(this);
-  });
+    var self = this;
+    //timed automatic moving of cats/yarn - game.end stops it
+    $.each(self.cats, function() {
+      this.move(this);
+    });
+    $.each(self.yarns, function() {
+      this.move(this);
+    });
   },
+  
   end: function() {
-  // stops cats moving after game ends - we'll need one for yarn too!
-  // @TODO: should be a foreach..but we're not there yet
-  // @TODO: the following line never returns. Something's broke.
-  clearInterval(game.clock); 
-  alert("Loser!");
+    // stops cats moving after game ends - we'll need one for yarn too!
+    // @TODO: should be a foreach..but we're not there yet
+    // @TODO: the following line never returns. Something's broke.
+    clearInterval(game.clock); 
+    alert("Loser!");
   },
+    
   move: function(who, direction) {
-  var self = this;
-  if (self.mouse.lives > 0){
-    var keepX = who.x;
-    var keepY = who.y;
-    if (who instanceof Mouse) { 
-    // I'm going to use this for game.shoveBlockChain
-    // since I don't want to pass direction through two functions
-    who.direction = direction;
-    }  
-    newSquare = self.board.getSquare(who.x, who.y, direction);
-    var newX = newSquare[0];
-    var newY = newSquare[1];
-    if (newX == -1) {
-    // dont move...hit an edge
-    return false;  
-    } else if (board.squares[newX][newY] !== null) {
-    // collision...decide result
-    if (this.collide(who, newX, newY)) {
-      // Immobile obstruction. Don't move
-      return false;
+    var self = this;
+    
+    if (self.gameOn) {
+      var keepX = who.x;
+      var keepY = who.y;
+      if (who instanceof Mouse) { 
+        // I'm going to use this for game.shoveBlockChain
+        // since I don't want to pass direction through two functions
+        who.direction = direction;
+      }  
+      var newSquare = self.board.getSquare(who.x, who.y, direction);
+      var newX = newSquare[0];
+      var newY = newSquare[1];
+      if (newX == -1 || newY == -1) {
+        return false; // dont move...hit an edge 
+      } else if (self.board.squares[newX][newY] !== null) {
+        // collision...decide result
+        if (this.collide(who, newX, newY)) {
+          // Immobile obstruction. Don't move
+          return false;
+        }
+      }
+      // OK to move
+      who.x = newX;
+      who.y = newY;
+      self.board.remove(keepX, keepY);
+      self.board.place(who);
+      return true;  
     }
-    }
-    // OK to move
-    who.x = newX;
-    who.y = newY;
-    board.remove(keepX, keepY);
-    board.place(who);
-    return true;  
-  }  
   },
+  
   collide: function(movedObj, x, y) {
     // @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
     if (movedObj.type === 'player') {
@@ -223,6 +231,7 @@ Game.prototype = {
       return true;
     }
   },
+  
   shoveBlockChain: function(x, y) {
     //find the end of the chain of blocks & check for obstruction
     results = this.findChainEnd(x, y);
@@ -279,6 +288,7 @@ Game.prototype = {
     return chainEnd;
   }
 };
+
 /* START GAME */
 $(function() {
   var game = new Game()

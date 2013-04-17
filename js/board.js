@@ -46,19 +46,22 @@ Board.prototype = {
   },
 
   remove: function(x, y) {
-    $('#c' + x + 'r' + y).html('');
-    board.squares[x][y] = null;
+    $('#c' + x + 'r' + y)
+			.css("background-image", "")
+			.css("background-position", "")
+			.css("background-repeat", "");
+    this.squares[x][y] = null;
   },
 
   getSquare: function(x, y, direction) {
     var self = this;
     var square = [];
-    newX = x;
-    newY = y;
+    var newX = x;
+    var newY = y;
 
     // -1, -1 means cannot move in that direction - met a board edge
     switch (direction) {
-      case 'left':
+    case 'west':
       if (0 == x) {
         newX = -1;
         newY = -1;
@@ -67,7 +70,7 @@ Board.prototype = {
       }
       break;
 
-      case 'up':
+    case 'north':
       if ((self.rows - 1) == y) {
         newX = -1;
         newY = -1;
@@ -76,52 +79,58 @@ Board.prototype = {
       }
       break;
 
-      case 'right':
+    case 'east':
       if ((self.columns - 1) == x) {
         newX = -1;
+				newY = -1;
       } else {
         newX = x + 1;
       }
       break;
 
-      case 'down':
+    case 'south':
       if (0 == y) {
         newX = -1;
+				newY = -1
       } else {
         newY = y - 1;
       }
       break;
 
-      case 'upleft':
+    case 'northwest':
       if ((self.rows - 1) == y || x == 0) {
         newX = -1;
+				newY = -1;
       } else {
         newX = x - 1;
         newY = y + 1;
       }
       break;
 
-      case 'upright':
-      if ((self.rows - 1) == y) {
+    case 'northeast':
+      if ((self.rows - 1) == y || (self.columns - 1) == x) {
         newX = -1;
+				newY = -1;
       } else {
         newX = x + 1;
         newY = y + 1;
       }
       break;
 
-      case 'downleft':
-      if (0 == y) {
+    case 'southwest':
+      if (0 == y || 0 == x) {
         newX = -1;
+				newY = -1;
       } else {
         newX = x - 1;
         newY = y - 1;
       }
       break;
 
-      case 'downright':
-      if (0 == y) {
+    case 'southeast':
+      if (0 == y || (self.columns - 1) == x) {
         newX = -1;
+				newY = -1;
       } else {
         newX = x + 1;
         newY = y - 1;
