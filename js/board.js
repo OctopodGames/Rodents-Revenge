@@ -16,9 +16,9 @@ Board.prototype = {
 
 		// Define DOM grid
     for (var i = self.rows-1; i >= 0; i--) {
-      newBoard += "<div class='row' id='row"+i+"'>";
+      newBoard += "<div class=\"row\" id=\"row"+i+"\">";
       for (var j = 0; j <= self.columns-1; j++) {
-        newBoard+="<div class='cell' id='c"+j+"r"+i+"'></div>";
+        newBoard+="<div class=\"cell\" id=\"c"+j+"r"+i+"\"></div>";
       }
       newBoard += "</div>";
     }
@@ -34,19 +34,19 @@ Board.prototype = {
       newBoard+="</div>";
     }
 
-    $('#board').html(newBoard);
+    $("#board").html(newBoard);
   },
 
   place: function(entity) {
-    $('#c' + entity.x + 'r' + entity.y)
-			.css("background-image", "url('img/" + entity.symbol + "')")
+    $("#c" + entity.x + "r" + entity.y)
+			.css("background-image", "url(\"img/" + entity.symbol + "\")")
 			.css("background-position", "center")
 			.css("background-repeat", "no-repeat");
     this.squares[entity.x][entity.y] = entity;
   },
 
   remove: function(x, y) {
-    $('#c' + x + 'r' + y)
+    $("#c" + x + "r" + y)
 			.css("background-image", "")
 			.css("background-position", "")
 			.css("background-repeat", "");
@@ -61,7 +61,7 @@ Board.prototype = {
 
     // -1, -1 means cannot move in that direction - met a board edge
     switch (direction) {
-    case 'west':
+    case "west":
       if (0 == x) {
         newX = -1;
         newY = -1;
@@ -70,7 +70,7 @@ Board.prototype = {
       }
       break;
 
-    case 'north':
+    case "north":
       if ((self.rows - 1) == y) {
         newX = -1;
         newY = -1;
@@ -79,7 +79,7 @@ Board.prototype = {
       }
       break;
 
-    case 'east':
+    case "east":
       if ((self.columns - 1) == x) {
         newX = -1;
 				newY = -1;
@@ -88,7 +88,7 @@ Board.prototype = {
       }
       break;
 
-    case 'south':
+    case "south":
       if (0 == y) {
         newX = -1;
 				newY = -1
@@ -97,7 +97,7 @@ Board.prototype = {
       }
       break;
 
-    case 'northwest':
+    case "northwest":
       if ((self.rows - 1) == y || x == 0) {
         newX = -1;
 				newY = -1;
@@ -107,7 +107,7 @@ Board.prototype = {
       }
       break;
 
-    case 'northeast':
+    case "northeast":
       if ((self.rows - 1) == y || (self.columns - 1) == x) {
         newX = -1;
 				newY = -1;
@@ -117,7 +117,7 @@ Board.prototype = {
       }
       break;
 
-    case 'southwest':
+    case "southwest":
       if (0 == y || 0 == x) {
         newX = -1;
 				newY = -1;
@@ -127,7 +127,7 @@ Board.prototype = {
       }
       break;
 
-    case 'southeast':
+    case "southeast":
       if (0 == y || (self.columns - 1) == x) {
         newX = -1;
 				newY = -1;
