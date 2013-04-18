@@ -179,7 +179,7 @@ Game.prototype = {
         return false; // dont move...hit an edge 
       } else if (self.board.squares[newX][newY] !== null) {
         // collision...decide result
-        if (this.collide(who, newX, newY)) {
+        if (self.collide(who, newX, newY)) {
           // Immobile obstruction. Don't move
           return false;
         }
