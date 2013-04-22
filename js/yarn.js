@@ -1,13 +1,13 @@
 "use strict";
 
 var Yarn = function Yarn(x, y, game) {
-	this.game = game;
-  this.symbol = 'yarn.png';
+  this.symbol = "yarn.png";
+	this.yarn = "yarn";
+  this.movable = true;
+  this.fatal = true;
   this.x = x;
   this.y = y;
-  this.movable = true;
   this.timer = null;
-  this.fatal = true;
 };
 
 Yarn.prototype = {
@@ -15,6 +15,6 @@ Yarn.prototype = {
   
   // @TODO: please make yarn smarter.
   move: function() {
-    //game.move(yarn, 'right');
+    //game.move(yarn, "right");
   }
 };
