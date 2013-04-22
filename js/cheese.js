@@ -1,10 +1,10 @@
 "use strict";
 
 var Cheese = function Cheese(x, y, game) {
-  this.game = game;
- 	this.symbol = '&#9744;';
+ 	this.symbol = "cheese.png";
+	this.type = "cheese";
   this.movable = true;
+  this.fatal = true;
   this.x = x;
   this.y = y;
-  this.fatal = true;
 };
