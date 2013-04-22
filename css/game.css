@@ -1,30 +1,1 @@
-#board{
- float:left;
-}
-
-.row{
- clear:both;/* deals with column floats */
-}
-
-.row:first-child > .cell{
- border-top:1px solid #000;
-}
-
-.cell{
- box-sizing:border-box;
- -moz-box-sizing:border-box;
- -webkit-box-sizing:border-box;
- text-align:center;
- padding-bottom:10px;
- border-right:1px solid #000;/* outline grid for visibility*/
- border-bottom:1px solid #000;
- float:left; /* or display inline - either would probably work. */
- cursor:pointer;
- height:60px;
- width:60px;
- font-size: 3em;
-}
-.cell img {  height: 58px; width: 58px;}
-.cell:first-child {
- border-left:1px solid #000;
-}
+#board{  float:left;}.row{  clear:both;/* deals with column floats */}.row:first-child > .cell{  border-top:1px solid #000;}.cell{  box-sizing:border-box;  -moz-box-sizing:border-box;  -webkit-box-sizing:border-box;  text-align:center;  padding-bottom:10px;  border-right:1px solid #000;/* outline grid for visibility*/  border-bottom:1px solid #000;  float:left; /* or display inline - either would probably work. */  height:60px;  width:60px;  font-size: 3em;}.cell img {  height: 58px;  width: 58px;}.cell:first-child {  border-left:1px solid #000;}
