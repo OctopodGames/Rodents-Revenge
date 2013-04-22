@@ -14,6 +14,8 @@ var key = {
 };
 
 var Game = function Game() {
+	var self = this;
+
   this.gameOn = true;
 	this.currentLevel = 0;
   this.boundEvents = [];
@@ -30,13 +32,26 @@ var Game = function Game() {
   this.sinkholes = [];
 
   // Event handlers
-  this.onEvent("die", function() {
-    console.log("Event handled, bitches!");
+  this.onEvent("deadMau5", function(emitter) {
+		self.board.remove(emitter.x, emitter.y);
+		var newSquare = self.board.findRandomEmptySquare();
+		emitter.x = newSquare[0];
+		emitter.y = newSquare[1];
+		window.setTimeout(function() {
+			self.board.place(emitter);
+		}, 3000);
   });
   this.onEvent("move", function() {
     console.log("MOVE THAT MUCHAFUCKA!");
   });
+  this.onEvent("gameEnd", function() {
 
+  });
+
+	// Add game object to document, for keypress handling
+	document.game = this;
+
+	// Begin handling events
   this.handleEvents();
 };
 
@@ -60,7 +75,7 @@ Game.prototype = {
       while (self.eventQueue.length > 0) {
         currentEvent = self.eventQueue.shift();
         if (self.eventHandlers.hasOwnProperty(currentEvent.eventName)) {
-          self.eventHandlers[currentEvent.eventName].call();
+          self.eventHandlers[currentEvent.eventName](currentEvent.emitter);
         }
       }
     }, 16.666);
@@ -69,7 +84,6 @@ Game.prototype = {
   start: function(number) {
     var self = this;
 
-    document.game = self; // Necessary to handle keydown events
     this.loadLevel(this.currentLevel);
     this.placeObjects();
     //this.clock = setInterval("this.timer()", 1500);

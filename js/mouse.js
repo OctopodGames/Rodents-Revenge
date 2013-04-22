@@ -2,59 +2,54 @@
 
 var Mouse = function Mouse(x, y, game) {
   this.symbol = "mouse.png";
-	this.type = "mouse";
+  this.type = "mouse";
   this.movable = true;
   this.fatal = false;
-	this.startingX = x;
+  this.startingX = x;
   this.x = x;
-	this.startingY = y;
+  this.startingY = y;
   this.y = y;
   this.lives = 3;
   this.direction = "";
-	this.eventListeners = [];
+  this.eventListeners = [];
 
-	this.addEventListener(game);
+  this.addEventListener(game);
 };
 
 Mouse.prototype = {
   constructor: Mouse,
 
-	addEventListener: function(obj) {
-		this.eventListeners.push(obj);
-	},
+  addEventListener: function(obj) {
+    this.eventListeners.push(obj);
+  },
 
-	removeEventListener: function(obj) {
-		var position = $.inArray(obj, this.eventListeners);
+  removeEventListener: function(obj) {
+    var position = $.inArray(obj, this.eventListeners);
 
-		if (position >= 0) {
-			this.eventListeners.splice(position, 1);
-		}
-	},
+    if (position >= 0) {
+      this.eventListeners.splice(position, 1);
+    }
+  },
 
-	emitEvent: function(eventName, emitter) {
-	  var self = this;
+  emitEvent: function(eventName) {
+    var self = this;
 
-	  $.each(this.eventListeners, function() {
-	    this.addEvent({"eventName": eventName, "emitter": emitter});
-	  });
-	},
+    $.each(this.eventListeners, function() {
+      this.addEvent({
+        "eventName": eventName,
+        "emitter": self
+      });
+    });
+  },
 
   die: function() {
-    /*this.lives--;
-    alert("Mouse died. Number of lives left: " + this.lives);
+    this.lives--;
+    console.log("Mouse died. Number of lives left: " + this.lives);
     if (this.lives <= 0) {
-      game.end();
+      this.emitEvent("gameOver");
     } else {
-      board.remove(this.x, this.y);
-      //move mouse to center of board for now - pending test for "safe zone"
-      this.x = 5;
-      this.y = 5;
-      this.movable = true; // Reset in case mouse was stuck in a sinkhole
-      this.symbol = "mouse.png"; // Reset in case mouse was stuck in a sinkhole
-      board.place(mouse);
-    }*/
-
-    this.emitEvent("die", this);
+      this.emitEvent("deadMau5");
+    }
   },
 
   stuck: function(x, y) {

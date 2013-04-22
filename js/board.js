@@ -1,7 +1,7 @@
 "use strict";
 
 var Board = function Board(rows, columns, game) {
-	this.game = game;
+  this.game = game;
   this.rows = rows;
   this.columns = columns;
   this.squares = [];
@@ -14,7 +14,7 @@ Board.prototype = {
     var self = this;
     var newBoard = "";
 
-		// Define DOM grid
+    // Define DOM grid
     for (var i = self.rows-1; i >= 0; i--) {
       newBoard += "<div class=\"row\" id=\"row"+i+"\">";
       for (var j = 0; j <= self.columns-1; j++) {
@@ -23,10 +23,10 @@ Board.prototype = {
       newBoard += "</div>";
     }
 
-		// Define logical grid
+    // Define logical grid
     for (var i = 0; i <= self.columns-1; i++) {
       self.squares[i] = [];
-	
+  
       for (var j = self.rows-1; j >= 0; j--) {
         self.squares[i][j] = null;
       }
@@ -38,19 +38,23 @@ Board.prototype = {
   },
 
   place: function(entity) {
+		var self = this;
+
     $("#c" + entity.x + "r" + entity.y)
-			.css("background-image", "url(\"img/" + entity.symbol + "\")")
-			.css("background-position", "center")
-			.css("background-repeat", "no-repeat");
-    this.squares[entity.x][entity.y] = entity;
+      .css("background-image", "url(\"img/" + entity.symbol + "\")")
+      .css("background-position", "center")
+      .css("background-repeat", "no-repeat");
+  	self.squares[entity.x][entity.y] = entity;
   },
 
   remove: function(x, y) {
+		var self = this;
+
     $("#c" + x + "r" + y)
-			.css("background-image", "")
-			.css("background-position", "")
-			.css("background-repeat", "");
-    this.squares[x][y] = null;
+      .css("background-image", "")
+      .css("background-position", "")
+      .css("background-repeat", "");
+    self.squares[x][y] = null;
   },
 
   getSquare: function(x, y, direction) {
@@ -82,7 +86,7 @@ Board.prototype = {
     case "east":
       if ((self.columns - 1) == x) {
         newX = -1;
-				newY = -1;
+        newY = -1;
       } else {
         newX = x + 1;
       }
@@ -91,7 +95,7 @@ Board.prototype = {
     case "south":
       if (0 == y) {
         newX = -1;
-				newY = -1
+        newY = -1
       } else {
         newY = y - 1;
       }
@@ -100,7 +104,7 @@ Board.prototype = {
     case "northwest":
       if ((self.rows - 1) == y || x == 0) {
         newX = -1;
-				newY = -1;
+        newY = -1;
       } else {
         newX = x - 1;
         newY = y + 1;
@@ -110,7 +114,7 @@ Board.prototype = {
     case "northeast":
       if ((self.rows - 1) == y || (self.columns - 1) == x) {
         newX = -1;
-				newY = -1;
+        newY = -1;
       } else {
         newX = x + 1;
         newY = y + 1;
@@ -120,7 +124,7 @@ Board.prototype = {
     case "southwest":
       if (0 == y || 0 == x) {
         newX = -1;
-				newY = -1;
+        newY = -1;
       } else {
         newX = x - 1;
         newY = y - 1;
@@ -130,7 +134,7 @@ Board.prototype = {
     case "southeast":
       if (0 == y || (self.columns - 1) == x) {
         newX = -1;
-				newY = -1;
+        newY = -1;
       } else {
         newX = x + 1;
         newY = y - 1;
@@ -139,7 +143,20 @@ Board.prototype = {
     }
     square = [newX, newY];
     return square;
-  }
+  },
+
+	findRandomEmptySquare: function() {
+		var self = this;
+
+		var x = Math.floor(Math.random() * self.columns);
+		var y = Math.floor(Math.random() * self.rows);
+
+		if (self.squares[x][y] === null) {
+			return [x, y];
+		} else {
+			self.findRandomEmptySquare();
+		}
+	}
 };
 
 /* @TODO: need a way to know where all the things are

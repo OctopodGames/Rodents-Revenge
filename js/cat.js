@@ -28,13 +28,13 @@ Cat.prototype = {
 		}
 	},
 
-	emitEvent: function(eventName, emitter) {
+	emitEvent: function(eventName) {
 	  var self = this;
-	  
+
 	  $.each(this.eventListeners, function() {
 	    this.addEvent({
 	      "eventName": eventName,
-	      "emitter": emitter,
+	      "emitter": this,
 	    });
 	  });
 	},
@@ -87,10 +87,10 @@ Cat.prototype = {
       return;
     }
     /* Distances even - move diagonally
-    * At this point, we"re assuming they"re 
+    * At this point, we're assuming they're
     * not on top of each other - collide handles that
     */
-    if (distX != 0 && distY != 0) { 
+    if (distX != 0 && distY != 0) {
       if (distX > 0){
         if (distY > 0){
           game.move(kitty, "upright");
