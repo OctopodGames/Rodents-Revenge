@@ -30,27 +30,27 @@ Cat.prototype = {
 		});
 	},
 
-  move: function(kitty, tried) {
+  move: function(Cat, tried) {
     // Determine distance
-    distX = mouse.x - kitty.x;
-    distY = mouse.y - kitty.y;
+    distX = mouse.x - Cat.x;
+    distY = mouse.y - Cat.y;
 
     // Horizontal distance greater - move horizontally
     if ((Math.abs(distX) > Math.abs(distY)) && distX != 0) {
       if (distX > 0){
-        if (!game.move(kitty, 'right')) {
+        if (!game.move(Cat, 'east')) {
           if (distY > 0){
-            game.move(kitty, 'up');
+            game.move(Cat, 'north');
           } else {
-            game.move(kitty, 'down');
+            game.move(Cat, 'south');
           }
         }
       } else {
-        if (!game.move(kitty, 'left')) {
+        if (!game.move(Cat, 'west')) {
           if (distY > 0){
-            game.move(kitty, 'up');
+            game.move(Cat, 'north');
           } else {
-            game.move(kitty, 'down');
+            game.move(Cat, 'south');
           }
         }
       }
@@ -59,19 +59,19 @@ Cat.prototype = {
 
     if (Math.abs(distX) < Math.abs(distY) && distY != 0) { // Vertical distance greater - move vertically
       if (distY > 0){
-        if (!game.move(kitty, 'up')) {
+        if (!game.move(Cat, 'north')) {
           if (distX > 0){
-            game.move(kitty, 'right');
+            game.move(Cat, 'east');
           } else {
-            game.move(kitty, 'left');
+            game.move(Cat, 'west');
           }
         }
       } else {
-        if (!game.move(kitty, 'down')) {
+        if (!game.move(Cat, 'south')) {
           if (distX > 0){
-            game.move(kitty, 'right');
+            game.move(Cat, 'east');
           } else {
-            game.move(kitty, 'left');
+            game.move(Cat, 'west');
           }
         }
       }
@@ -84,15 +84,15 @@ Cat.prototype = {
     if (distX != 0 && distY != 0) { 
       if (distX > 0){
         if (distY > 0){
-          game.move(kitty, 'upright');
+          game.move(Cat, 'northeast');
         } else {
-          game.move(kitty, 'downright');
+          game.move(Cat, 'southeast');
         }
       } else {
         if (distY > 0){
-          game.move(kitty, 'upleft');
+          game.move(Cat, 'northwest');
         } else {
-          game.move(kitty, 'downleft');
+          game.move(Cat, 'southwest');
         }
       }
 
