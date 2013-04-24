@@ -10,14 +10,14 @@ var key = {
   s: 83,
   d: 68,
   n: 78, // temp cheat code to load level 1
-	r: 82
+  r: 82
 };
 
 var Game = function Game() {
-	var self = this;
+  var self = this;
 
   this.gameOn = true;
-	this.currentLevel = 0;
+  this.currentLevel = 0;
   this.boundEvents = [];
   this.eventQueue = [];
   this.eventHandlers = {};
@@ -33,25 +33,37 @@ var Game = function Game() {
 
   // Event handlers
   this.onEvent("deadMau5", function(emitter) {
-		self.board.remove(emitter.x, emitter.y);
-		var newSquare = self.board.findRandomEmptySquare();
-		emitter.x = newSquare[0];
-		emitter.y = newSquare[1];
-		window.setTimeout(function() {
-			self.board.place(emitter);
-		}, 3000);
+    self.board.remove(emitter.x, emitter.y);
+    var newSquare = self.board.findRandomEmptySquare();
+    emitter.x = newSquare[0];
+    emitter.y = newSquare[1];
+    window.setTimeout(function() {
+      self.board.place(emitter);
+    }, 3000);
   });
-  this.onEvent("move", function() {
-    console.log("MOVE THAT MUCHAFUCKA!");
+  this.onEvent("move", function(emitter) {
+    self.board.remove(emitter.x, emitter.y);
+    emitter.x = emitter.moveX;
+    emitter.y = emitter.moveY;
+
+    if (emitter.type == "cat") {
+      if (self.board.squares[emitter.x][emitter.y] != null &&
+        self.board.squares[emitter.x][emitter.y].type == "mouse") {
+        
+        self.mouse.die();
+        self.board.place(emitter);
+      }
+    }
+    self.board.place(emitter);
   });
   this.onEvent("gameEnd", function() {
 
   });
 
-	// Add game object to document, for keypress handling
-	document.game = this;
+  // Add game object to document, for keypress handling
+  document.game = this;
 
-	// Begin handling events
+  // Begin handling events
   this.handleEvents();
 };
 
@@ -92,7 +104,7 @@ Game.prototype = {
 
   loadLevel: function(number) {
     var self = this;
-    /** Read in level objects from file **/
+
     $.ajax({
       url: "levels/level"+number+".json",
       dataType: "json",
@@ -104,7 +116,7 @@ Game.prototype = {
         self.mouse = new Mouse(level.mouse.x, level.mouse.y, self)
         // Create the cats
         $.each(level.cats, function() {
-          self.cats.push(new Cat(this[0], this[1], self));
+          self.cats.push(new Cat(this[0], this[1], self, self.mouse));
         });
         // Create the blocks
         $.each(level.blocks, function() {
@@ -185,7 +197,7 @@ Game.prototype = {
   },
 
   resetLevel: function(number) {
-		this.board.draw();
+    this.board.draw();
 
     this.mouse = {};
     this.board = {};
@@ -196,8 +208,8 @@ Game.prototype = {
     this.traps = [];
     this.sinkholes = [];
 
-		this.loadLevel(this.currentLevel);
-		this.placeObjects();
+    this.loadLevel(this.currentLevel);
+    this.placeObjects();
   },
 
   end: function() {
@@ -234,12 +246,19 @@ Game.prototype = {
       who.y = newSquare[1];
       self.board.remove(keepX, keepY);
       self.board.place(who);
+
+      /*if (who.type === "mouse") {
+        $.each(self.cats, function() {
+          this.updateMouseLocation(self.mouse);
+        });
+      }*/
+
       return true;
     }
   },
 
   collide: function(movedObj, x, y) {
-		var self = this;
+    var self = this;
 
     // @TODO: test if there is a bug when cat/yarn & mouse move to same square simultaneously
     if (movedObj.type === "mouse") {
@@ -299,10 +318,11 @@ Game.prototype = {
   },
 
   findChainEnd: function(x, y) {
-    //find the end of the chain of blocks
-    var chainEnd = new Array;
-    var newSquare = new Array;
-    while(board.squares[x][y] === "block"){
+    var chainEnd = [];
+    var newSquare = [];
+    console.log(this.board.squares[x][y]);
+
+    /*while (this.board.squares[x][y].type == "block"){
       newSquare = board.getSquare(x, y, mouse.direction);
       x = newSquare[0];
       y = newSquare[1];
@@ -333,7 +353,7 @@ Game.prototype = {
     } else {
       chainEnd[1] = "space";
     }
-    return chainEnd;
+    return chainEnd;*/
   },
 };
 
