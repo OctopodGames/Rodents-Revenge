@@ -38,17 +38,17 @@ Board.prototype = {
   },
 
   place: function(entity) {
-		var self = this;
+    var self = this;
 
     $("#c" + entity.x + "r" + entity.y)
       .css("background-image", "url(\"img/" + entity.symbol + "\")")
       .css("background-position", "center")
       .css("background-repeat", "no-repeat");
-  	self.squares[entity.x][entity.y] = entity;
+    self.squares[entity.x][entity.y] = entity;
   },
 
   remove: function(x, y) {
-		var self = this;
+    var self = this;
 
     $("#c" + x + "r" + y)
       .css("background-image", "")
@@ -145,18 +145,18 @@ Board.prototype = {
     return square;
   },
 
-	findRandomEmptySquare: function() {
-		var self = this;
+  findRandomEmptySquare: function() {
+    var self = this;
 
-		var x = Math.floor(Math.random() * self.columns);
-		var y = Math.floor(Math.random() * self.rows);
+    var x = Math.floor(Math.random() * self.columns);
+    var y = Math.floor(Math.random() * self.rows);
 
-		if (self.squares[x][y] === null) {
-			return [x, y];
-		} else {
-			self.findRandomEmptySquare();
-		}
-	}
+    if (self.squares[x][y] === null) {
+      return [x, y];
+    } else {
+      self.findRandomEmptySquare();
+    }
+  }
 };
 
 /* @TODO: need a way to know where all the things are
