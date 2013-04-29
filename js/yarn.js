@@ -25,7 +25,6 @@ Yarn.prototype = {
  		* If the yarn comes into contact with another block in it's travels it will
  		* bounce off of those the same way, reflecting off them with random chance
  		* of varying in it's path.
- 		*
  		* This continues until something happens to the yarn that removes it from the game.
  		*/
 
@@ -73,16 +72,16 @@ Yarn.prototype = {
 			
 
 			//Create an array with a 20% chance of varying direction and an 80% chance of going with moveDir
-			moveArray[0]=moveDir
-			moveArray[1]=moveDir
-			moveArray[2]=moveDir
-			moveArray[3]=moveDir
-			moveArray[4]=moveDir
+			moveArray[0]=moveDir;
+			moveArray[1]=moveDir;
+			moveArray[2]=moveDir;
+			moveArray[3]=moveDir;
+			moveArray[4]=moveDir;
 			
 			//Make the move by generating a random digit corrosponding to the array, and make that move	
 			random = Math.random()*(4-0)+0;
 			move = moveArray[random];			
-
+			
 		//When it does hit something
 			
 			//Set touchBlock = true
