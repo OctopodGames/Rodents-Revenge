@@ -41,9 +41,7 @@ var Game = function Game() {
 			self.board.place(emitter);
 		}, 3000);
 	});
-	this.onEvent("move", function() {
-		console.log("MOVE THAT MUCHAFUCKA!");
-	});
+	//this.onEvent("move", function() {});
 	this.onEvent("gameEnd", function() {
 
 	});
@@ -104,7 +102,7 @@ Game.prototype = {
 				self.mouse = new Mouse(level.mouse.x, level.mouse.y, self)
 				// Create the cats
 				$.each(level.cats, function() {
-					self.cats.push(new Cat(this[0], this[1], self));
+					self.cats.push(new Cat(this[0], this[1], self, self.mouse));
 				});
 				// Create the blocks
 				$.each(level.blocks, function() {
