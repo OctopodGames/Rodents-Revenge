@@ -9,15 +9,15 @@ var key = {
 	a: 65,
 	s: 83,
 	d: 68,
-	n: 78, // temp cheat code to load level 1
-	r: 82
+	n: 78, // load a new level of the user's choosing
+	r: 82  // reload this level
 };
 
-var Game = function Game() {
+var Game = function Game(levelNumber) {
 	var self = this;
 
 	this.gameOn = true;
-	this.currentLevel = 0;
+	this.currentLevel = levelNumber;
 	this.boundEvents = [];
 	this.eventQueue = [];
 	this.eventHandlers = {};
@@ -25,7 +25,7 @@ var Game = function Game() {
 	this.mouse = {};
 	this.board = {};
 	this.cats = [];
-	this.yarns = [];
+	this.yarn = [];
 	this.blocks = [];
 	this.rocks = [];
 	this.traps = [];
@@ -42,8 +42,8 @@ var Game = function Game() {
 		}, 3000);
 	});
 	//this.onEvent("move", function() {});
-	this.onEvent("gameEnd", function() {
-
+	this.onEvent("gameOver", function() {
+		self.end();
 	});
 
 	// Add game object to document, for keypress handling
@@ -79,20 +79,20 @@ Game.prototype = {
 		}, 16.666);
 	},
 
-	start: function(number) {
+	start: function(levelNumber) {
 		var self = this;
 
-		this.loadLevel(this.currentLevel);
-		this.placeObjects();
-		//this.clock = setInterval("this.timer()", 1500);
+		self.loadLevel(levelNumber);
+		self.placeObjects();
+		//self.clock = setInterval("self.timer()", 1500);
 		$(document).keydown(self.handleKey);
 	},
 
-	loadLevel: function(number) {
+	loadLevel: function(levelNumber) {
 		var self = this;
 		/** Read in level objects from file **/
 		$.ajax({
-			url: "levels/level"+number+".json",
+			url: "levels/level"+levelNumber+".json",
 			dataType: "json",
 			async: false,
 			success: function(level) {
@@ -115,6 +115,10 @@ Game.prototype = {
 				// Create the traps
 				$.each(level.traps, function() {
 					self.traps.push(new Trap(this[0], this[1], self));
+				});
+				// Create the yarn
+				$.each(level.yarn, function() {
+					self.yarn.push(new Yarn(this[0], this[1], self));
 				});
 				// Create the sinkholes
 				$.each(level.sinkholes, function() {
@@ -144,6 +148,9 @@ Game.prototype = {
 		$.each(self.traps, function() { // Place traps
 			self.board.place(this);
 		});
+		$.each(self.yarn, function() { // Place yarn
+			self.board.place(this);
+		});
 		$.each(self.sinkholes, function() { // Place sinkholes
 			self.board.place(this);
 		});
@@ -155,6 +162,8 @@ Game.prototype = {
 		if (self.mouse.movable == false) {
 			return;
 		}
+
+		console.log(e.keyCode + " was pressed.");
 		switch (e.keyCode) {
 			case key.left:
 			case key.a:
@@ -175,35 +184,48 @@ Game.prototype = {
 			case key.s:
 				self.move(self.mouse, "south");
 				break;
-
+			
+			case key.n:
+				self.loadNewLevel();
+				break;
+				
 			case key.r:
-				self.resetLevel();
+				self.resetLevel(self.currentLevel);
 				break;
 		}
 	},
 
-	resetLevel: function(number) {
-		this.board.draw();
+	resetLevel: function(levelNumber) {
+		var self = this;
+		self.board.draw();
 
-		this.mouse = {};
-		this.board = {};
-		this.cats = [];
-		this.yarn = [];
-		this.blocks = [];
-		this.rocks = [];
-		this.traps = [];
-		this.sinkholes = [];
+		self.mouse = {};
+		self.board = {};
+		self.cats = [];
+		self.yarn = [];
+		self.blocks = [];
+		self.rocks = [];
+		self.traps = [];
+		self.sinkholes = [];
 
-		this.loadLevel(this.currentLevel);
-		this.placeObjects();
+		self.loadLevel(levelNumber);
+		self.placeObjects();
 	},
-
+	
+	loadNewLevel: function() {
+		
+		var newLevelNum = prompt("Level to load:");
+		this.resetLevel(newLevelNum);
+		
+		
+	},
+	
 	end: function() {
-		// stops cats moving after game ends - we"ll need one for yarn too!
-		// @TODO: should be a foreach..but we"re not there yet
-		// @TODO: the following line never returns. Something"s broke.
-		clearInterval(game.clock);
-		alert("Loser!");
+		alert("Game Over!");
+
+		// This a HORRIBLE, DIRTY trick to stop keypresses.
+		// Someone who knows what they're doing should probably fix this.
+		key = {};  // nuke the key character values. BOOM.
 	},
 
 	move: function(who, direction) {
@@ -348,6 +370,7 @@ Game.prototype = {
 
 /* START GAME */
 $(function() {
-	var game = new Game()
-	game.start(0);
+	var levelNumber = 1;
+	var game = new Game(levelNumber)
+	game.start(levelNumber);
 });

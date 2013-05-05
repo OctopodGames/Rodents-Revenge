@@ -86,6 +86,7 @@ Yarn.prototype = {
 			
 			//Set touchBlock = true
 			touchBlock = true;	
-	 }
-}
+		}
+	}
+  }
 };
