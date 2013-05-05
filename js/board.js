@@ -18,7 +18,7 @@ Board.prototype = {
     for (var i = self.rows-1; i >= 0; i--) {
       newBoard += "<div class=\"row\" id=\"row"+i+"\">";
       for (var j = 0; j <= self.columns-1; j++) {
-        newBoard+="<div class=\"cell\" id=\"c"+j+"r"+i+"\"></div>";
+        newBoard+="<div class=\"cell\" id=\"c"+j+"r"+i+"\"><img id=\"img-c"+j+"r"+i+"\" src=\"img/blank.png\" /></div>";
       }
       newBoard += "</div>";
     }
@@ -39,11 +39,13 @@ Board.prototype = {
 
   place: function(entity) {
     var self = this;
-
+    
+    // Grrr. These two commands refuse to co-exist in the same function.
+	$("#c" + entity.x + "r" + entity.y)
+      .find("img").remove()                      // remove blank.png
+    self.squares[entity.x][entity.y] = entity;
     $("#c" + entity.x + "r" + entity.y)
-      .css("background-image", "url(\"img/" + entity.symbol + "\")")
-      .css("background-position", "center")
-      .css("background-repeat", "no-repeat");
+      .prepend("<img id=\"img-c" + entity.x + "r" + entity.y  + "\" src=\"img/" + entity.symbol + "\" />");
     self.squares[entity.x][entity.y] = entity;
   },
 
@@ -51,10 +53,12 @@ Board.prototype = {
     var self = this;
 
     $("#c" + x + "r" + y)
-      .css("background-image", "")
-      .css("background-position", "")
-      .css("background-repeat", "");
+      .find("img").remove();
     self.squares[x][y] = null;
+    $("#c" + x + "r" + y)
+      .prepend("<img id=\"img-c" + x + "r" + y  + "\" src=\"img/blank.png\" />");
+    self.squares[x][y] = null;
+
   },
 
   getSquare: function(x, y, direction) {
@@ -159,6 +163,3 @@ Board.prototype = {
   }
 };
 
-/* @TODO: need a way to know where all the things are
-/* I addes an array to hold square contents and added 
-/* placement/removal to the .place and .remove functions - SJP */
