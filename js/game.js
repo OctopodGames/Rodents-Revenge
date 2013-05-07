@@ -163,7 +163,6 @@ Game.prototype = {
 			return;
 		}
 
-		console.log(e.keyCode + " was pressed.");
 		switch (e.keyCode) {
 			case key.left:
 			case key.a:
