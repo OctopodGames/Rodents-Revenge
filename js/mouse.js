@@ -1,7 +1,10 @@
 "use strict";
 
+var normalGraphic = "mouse.png";
+var stuckGraphic = "stuckMouse.png";
+
 var Mouse = function Mouse(x, y, game) {
-  this.symbol = "mouse.png";
+  this.symbol = normalGraphic;
   this.type = "mouse";
   this.movable = true;
   this.fatal = false;
@@ -12,6 +15,7 @@ var Mouse = function Mouse(x, y, game) {
   this.lives = 3;
   this.direction = "";
   this.eventListeners = [];
+  this.game = game;
 
   this.addEventListener(game);
 };
@@ -53,18 +57,22 @@ Mouse.prototype = {
   },
 
   stuck: function(x, y) {
-    board.remove(this.x, this.y);
-    this.x = x;
-    this.y = y;
-    this.symbol = "&#9785;";
-    this.movable = false;
-    board.place( mouse );
-    alert("Mouse is stuck for ten turns!");
+    var self = this;
+    var myBoard = self.game.board;
+    myBoard.remove( self.x , self.y );   // remove the sinkhole graphic
+    self.x = x;
+    self.y = y;
+    self.symbol = stuckGraphic;
+    self.movable = false;
+    myBoard.place( self );				// place the stuck mouse graphic
+
     setTimeout(function() {
-      mouse.movable = true;
-      mouse.symbol = "&#9765;";
-      //alert("Mouse is free");
-      board.place( mouse );
+      self.movable = true;
+      self.symbol = normalGraphic;
+
+      myBoard.remove( x , y );
+      myBoard.place( self );
     }, 5000);
+
   }
 };
