@@ -21,6 +21,8 @@ var Game = function Game(levelNumber) {
 	this.boundEvents = [];
 	this.eventQueue = [];
 	this.eventHandlers = {};
+	this.time = 0;
+	this.score = 0;
 
 	this.mouse = {};
 	this.board = {};
@@ -154,8 +156,25 @@ Game.prototype = {
 		$.each(self.sinkholes, function() { // Place sinkholes
 			self.board.place(this);
 		});
+		self.time = 0;
+		window.setTimeout(function(){self.timer();}, 1000);
 	},
 
+	timer: function(){
+		var self = document.game;
+		self.time++;
+		if((self.time % 10) == 0){
+			//alert(self.score);
+		self.score++;
+			$('#score').html(self.score);
+		}
+		
+		$('#ttc').html(30 - (self.time % 30));
+		$('#tty').html(60 - (self.time % 60));
+		
+		window.setTimeout(function(){self.timer();}, 1000);
+	},
+	
 	handleKey: function(e) {
 		var self = document.game;
 
