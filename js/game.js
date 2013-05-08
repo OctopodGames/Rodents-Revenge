@@ -235,16 +235,16 @@ Game.prototype = {
 			var keepY = who.y;
 			if (who.type === "mouse") {
 				// I"m going to use this for game.shoveBlockChain
-				// since I don"t want to pass direction through two functions
+				// since I don't want to pass direction through two functions
 				who.direction = direction;
 			}
 			var newSquare = self.board.getSquare(who.x, who.y, direction);
 			if (newSquare[0] == -1 && newSquare[1] == -1) {
-				return false; // dont move...hit an edge
+				return false; // don't move...hit an edge
 			} else if (self.board.squares[newSquare[0]][newSquare[1]] !== null) {
 				// collision...decide result
 				if (self.collide(who, newSquare[0], newSquare[1])) {
-					// Immobile obstruction. Don"t move
+					// Immobile obstruction. Don't move
 					return false;
 				}
 			}
@@ -265,7 +265,7 @@ Game.prototype = {
 				case "cat":
 				case "yarn":
 					self.mouse.die();
-					return true; // Don"t execute move, next mouse re-appeared in safe zone.
+					return true; // Don't execute move, next mouse re-appeared in safe zone.
 					break;
 				case "sinkhole":
 					self.mouse.stuck(x, y); // Mouse is stuck for ten cat turns
@@ -303,7 +303,7 @@ Game.prototype = {
 		var results = this.findChainEnd(x, y);
 
 		if (!results[0]) {
-			// the chain of blocks is obstructed - can''t move
+			// the chain of blocks is obstructed - can't move
 			return false;
 		} else if (results[1] === "sinkhole") {
 			//um, just obliterate them with the mouse character
@@ -312,8 +312,13 @@ Game.prototype = {
 			// add block at chain end. Then let normal mouse move obliterate closest block
 			x = results[2];
 			y = results[3];
-			this.board.place(new Block(x, y, this));
-			return true;
+			if(this.board.testSquare(x,y)){
+				this.board.place(new Block(x, y, this))
+				return true;        
+			}else{
+				return false;
+			}
+			
 		}
 
 	},
