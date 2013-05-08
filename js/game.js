@@ -13,6 +13,8 @@ var key = {
 	r: 82  // reload this level
 };
 
+var savedKey = key;    // a copy for when Lorena nukes keypresses to end the game.
+
 var Game = function Game(levelNumber) {
 	var self = this;
 
@@ -90,6 +92,7 @@ Game.prototype = {
 
 	loadLevel: function(levelNumber) {
 		var self = this;
+		self.key = self.savedKey;
 		/** Read in level objects from file **/
 		$.ajax({
 			url: "levels/level"+levelNumber+".json",
@@ -212,19 +215,21 @@ Game.prototype = {
 	},
 	
 	loadNewLevel: function() {
-		
 		var newLevelNum = prompt("Level to load:");
+		this.currentLevel = newLevelNum;
 		this.resetLevel(newLevelNum);
-		
-		
 	},
 	
 	end: function() {
-		alert("Game Over!");
+		this.board.remove(this.mouse.x, this.mouse.y);		
+		alert("Game Over! Press n or r to play again.");
 
 		// This a HORRIBLE, DIRTY trick to stop keypresses.
 		// Someone who knows what they're doing should probably fix this.
-		key = {};  // nuke the key character values. BOOM.
+		this.key = {
+			n: 78, // load a new level of the user's choosing
+			r: 82  // reload this level		
+		};  // nuke the key character values. BOOM.
 	},
 
 	move: function(who, direction) {
