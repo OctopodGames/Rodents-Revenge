@@ -16,7 +16,7 @@ Board.prototype = {
 
 		// Define DOM grid
 		for (var i = self.rows-1; i >= 0; i--) {
-			newBoard += "<div class='row 'id='row"+i+"'>";
+			newBoard += "<div class='rw' id='row"+i+"'>";
 			for (var j = 0; j <= self.columns-1; j++) {
 				var id = "c"+j+"r"+i;
 				newBoard+="<div class='cell' id='"+id+"'><img id='img-"+id+"' src='img/blank.png' /></div>";
