@@ -13,6 +13,8 @@ var key = {
 	r: 82  // reload this level
 };
 
+var savedKey = key;    // a copy for when Lorena nukes keypresses to end the game.
+
 var Game = function Game(levelNumber) {
 	var self = this;
 
@@ -21,6 +23,8 @@ var Game = function Game(levelNumber) {
 	this.boundEvents = [];
 	this.eventQueue = [];
 	this.eventHandlers = {};
+	this.time = 0;
+	this.score = 0;
 
 	this.mouse = {};
 	this.board = {};
@@ -90,6 +94,7 @@ Game.prototype = {
 
 	loadLevel: function(levelNumber) {
 		var self = this;
+		self.key = self.savedKey;
 		/** Read in level objects from file **/
 		$.ajax({
 			url: "levels/level"+levelNumber+".json",
@@ -154,8 +159,25 @@ Game.prototype = {
 		$.each(self.sinkholes, function() { // Place sinkholes
 			self.board.place(this);
 		});
+		self.time = 0;
+		window.setTimeout(function(){self.timer();}, 1000);
 	},
 
+	timer: function(){
+		var self = document.game;
+		self.time++;
+		if((self.time % 10) == 0){
+			//alert(self.score);
+		self.score++;
+			$('#score').html(self.score);
+		}
+		
+		$('#ttc').html(30 - (self.time % 30));
+		$('#tty').html(60 - (self.time % 60));
+		
+		window.setTimeout(function(){self.timer();}, 1000);
+	},
+	
 	handleKey: function(e) {
 		var self = document.game;
 
@@ -163,7 +185,6 @@ Game.prototype = {
 			return;
 		}
 
-		console.log(e.keyCode + " was pressed.");
 		switch (e.keyCode) {
 			case key.left:
 			case key.a:
@@ -213,19 +234,21 @@ Game.prototype = {
 	},
 	
 	loadNewLevel: function() {
-		
 		var newLevelNum = prompt("Level to load:");
+		this.currentLevel = newLevelNum;
 		this.resetLevel(newLevelNum);
-		
-		
 	},
 	
 	end: function() {
-		alert("Game Over!");
+		this.board.remove(this.mouse.x, this.mouse.y);		
+		alert("Game Over! Press n or r to play again.");
 
 		// This a HORRIBLE, DIRTY trick to stop keypresses.
 		// Someone who knows what they're doing should probably fix this.
-		key = {};  // nuke the key character values. BOOM.
+		this.key = {
+			n: 78, // load a new level of the user's choosing
+			r: 82  // reload this level		
+		};  // nuke the key character values. BOOM.
 	},
 
 	move: function(who, direction) {
@@ -236,16 +259,16 @@ Game.prototype = {
 			var keepY = who.y;
 			if (who.type === "mouse") {
 				// I"m going to use this for game.shoveBlockChain
-				// since I don"t want to pass direction through two functions
+				// since I don't want to pass direction through two functions
 				who.direction = direction;
 			}
 			var newSquare = self.board.getSquare(who.x, who.y, direction);
 			if (newSquare[0] == -1 && newSquare[1] == -1) {
-				return false; // dont move...hit an edge
+				return false; // don't move...hit an edge
 			} else if (self.board.squares[newSquare[0]][newSquare[1]] !== null) {
 				// collision...decide result
 				if (self.collide(who, newSquare[0], newSquare[1])) {
-					// Immobile obstruction. Don"t move
+					// Immobile obstruction. Don't move
 					return false;
 				}
 			}
@@ -266,7 +289,7 @@ Game.prototype = {
 				case "cat":
 				case "yarn":
 					self.mouse.die();
-					return true; // Don"t execute move, next mouse re-appeared in safe zone.
+					return true; // Don't execute move, next mouse re-appeared in safe zone.
 					break;
 				case "sinkhole":
 					self.mouse.stuck(x, y); // Mouse is stuck for ten cat turns
@@ -304,7 +327,7 @@ Game.prototype = {
 		var results = this.findChainEnd(x, y);
 
 		if (!results[0]) {
-			// the chain of blocks is obstructed - can''t move
+			// the chain of blocks is obstructed - can't move
 			return false;
 		} else if (results[1] === "sinkhole") {
 			//um, just obliterate them with the mouse character
@@ -313,8 +336,13 @@ Game.prototype = {
 			// add block at chain end. Then let normal mouse move obliterate closest block
 			x = results[2];
 			y = results[3];
-			this.board.place(new Block(x, y, this));
-			return true;
+			if(this.board.testSquare(x,y)){
+				this.board.place(new Block(x, y, this))
+				return true;        
+			}else{
+				return false;
+			}
+			
 		}
 
 	},
