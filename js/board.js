@@ -16,9 +16,9 @@ Board.prototype = {
 
 		// Define DOM grid
 		for (var i = self.rows-1; i >= 0; i--) {
-			newBoard += "<div class=\"row\" id=\"row"+i+"\">";
+			newBoard += "<div class='row' id='row"+i+"'>";
 			for (var j = 0; j <= self.columns-1; j++) {
-				newBoard+="<div class=\"cell\" id=\"c"+j+"r"+i+"\"><img id=\"img-c"+j+"r"+i+"\" src=\"img/blank.png\" /></div>";
+				newBoard+="<div class='cell' id='c"+j+"r"+i+"'><img id='img-c"+j+"r"+i+"' src='img/blank.png' /></div>";
 			}
 			newBoard += "</div>";
 		}

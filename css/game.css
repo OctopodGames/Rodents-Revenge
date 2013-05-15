@@ -1,15 +1,1 @@
-#board{
-}
-
-.row{
-}
-/* top border */
-.row:first-child > .cell{
- border-top:1px solid #000;
-}
-
-.cell{ border-right:1px solid #000;/* outline grid for visibility*/
- border-bottom:1px solid #000;
- display: inline-block;  max-width: 4%;
-}.cell img{ text-align: center;  vertical-align: middle;  max-width: 100%;}
-/* leftmost border */.cell:first-child { border-left:1px solid #000;}
+#board{	padding-left: 5%;}.row{}/* top border */.row:first-child > .cell{ border-top:1px solid #000;}.cell{ border-right:1px solid #000;  /*outline grid for visibility*/ border-bottom:1px solid #000; display: inline-block;  max-width: 3%;}.cell img{ text-align: center;  vertical-align: middle;  max-width: 100%;}/* leftmost border */.cell:first-child { border-left:1px solid #000;}
