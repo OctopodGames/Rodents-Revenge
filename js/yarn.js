@@ -8,14 +8,38 @@ var Yarn = function Yarn(x, y, game) {
   this.x = x;
   this.y = y;
   this.timer = null;
+
+	this.timer();
 };
+
+//This is my attempt at reading and emulating some of the Object-Oriented Stuff Stephen Wrote
+//Z.D. helped me better understand what is happening and how it's working, but it's still over my head by a bit
 
 Yarn.prototype = {
   constructor: Yarn,
-  
-  // @TODO: please make yarn smarter.
+  alive = true;
+	
+	addEventListener: function(object) {
+		this.eventListener.push(object);
+	},
+	
+	removeEventListener: function(obj) {
+		var position = $.inArray(obj, this.eventListeners);
+	},
+
+	emitEvent: function(eventName) {
+		var self = this;
+
+	},
+}
   move: function() {
-    while (alive = true){
+	
+		//Declare some variables
+		var alive;
+		alive = true;
+
+		
+    while (alive == true){
 		/*
  		* The general idea behind my yarn, is that it determines which way to move
  		* based upon the edge it spawns on. From there it moves in a direction as if
@@ -27,66 +51,100 @@ Yarn.prototype = {
  		* of varying in it's path.
  		* This continues until something happens to the yarn that removes it from the game.
  		*/
+		
+		//If the yarn hasn't moved yet
+		if (this.hasMoved = 0;){
+			//Determine which wall the yarn is sitting on and "Bounce" off of that wall and keep moving in that dir (dir=direction)
+			if (this.x==0 && this.y==0){
+				this.dir = northeast;			
+			}
+    	else if (this.x==0 && this.y==25){
+				this.dir = southeast;
+      }
+      else if (this.x==25 && this.y==25){
+				this.dir = southwest;
+      }
+      else if (this.x==25 && this.y==0){
+				this.dir = northwest;
+      }
+      else if (this.x==0){
+				this.dir = east;
+      }
+      else if (this.x==0 && this.y==0){
+				this.dir = west;
+      }
+      else if (this.x==0 && this.y==0){
+				this.dir = north;
+      }
+      else if (this.x==0 && this.y==0){
+				this.dir = south;
+      }
+			this.hasMoved = 1;
+		}
+		//Else, if the ball is already moving
+		else{
+			//Check and see if the ball is going to "hit" something.
+			if (this.dir == north){
+				if ((this.x)+1 != null){
+					hit = 1;
+					side = n;	
+				}	
+			}
+      if (this.dir == south){
+				if ((this.x)-1 != null){
+					hit = 1;
+					side = s;
+      	}
+			}
+      if (this.dir == east){
+				if ((this.y)+1 != null){
+					hit = 1;
+					side = e;
+				}
+      }
+      if (this.dir == west){
+				if((this.y)-1 != null){
+					hit = 1;
+					side = w;
+				}
+      }
+      if (this.dir == northwest){
+        if((this.x-1) && (this.y+1) != null){
+          hit = 1;
+					side = nw;
+        }
+      }
+      if (this.dir == northeast){
+        if((this.x+1) && (this.y+1) != null){
+          hit = 1;
+					side = ne;
+        }
+      }
+      if (this.dir == southwest){
+        if((this.x-1) && (this.y-1) != null){
+          hit = 1;
+					side = sw;
+        }
+      }
+      if (this.dir == southeast){
+        if((this.x-1) && (this.y+1) != null){
+          hit = 1;
+					side = se;
+        }
+      }
+			
+     	//If it is...
+			if (hit == 1){
+					//Create an array of possible "bounces"
 
-		//Declare the variables an arrays
-		moveArray = new Array();
-		var random;
-		var direction;
-		var touchBlock;
-		var altMove;
-
-	
-		//If the yarn is "touching a block" (i.e. - spawn, bouncing off another block) <-- Currently just edge
-		if (touching == true){
-			//Determine which edge the ball is spawning on and set the proper direction			
-			if (this.x == 0 && this.y == 0){
-				direction = northeast;
+					//Create a random number between 1 and the #ofMoves
+					//Choose that move from the array and make that the new direction
 			}
-			else if (this.x == 0 && this.y == 10){
-				direction = southeast;
-			}
-			else if (this.x == 10 && this.y == 10){
-				direction = southwest;
-			}
-			else if (this.x == 10 && this.y == 0){
-				direction = northwest;
-			}
-			else if (this.x == 0){	
-				direction = west;
-			}
-			else if (this.x == 10){
-				direction = east;
-			}
-			else if (this.y == 0){
-				direction = north;
-			}
-			else if (this.y == 10){
-				direction = south;
+			else{	
+				//If it isn't
+					//Keep moving in the same direction.
 			}
 		}
-
-
-		//While the yarn doesn't hit anything
-		while (touchBlock != true){
-			//Determine the "alternate move" possible in the array
-			
-
-			//Create an array with a 20% chance of varying direction and an 80% chance of going with moveDir
-			moveArray[0]=moveDir;
-			moveArray[1]=moveDir;
-			moveArray[2]=moveDir;
-			moveArray[3]=moveDir;
-			moveArray[4]=moveDir;
-			
-			//Make the move by generating a random digit corrosponding to the array, and make that move	
-			random = Math.random()*(4-0)+0;
-			move = moveArray[random];			
-			
-		//When it does hit something
-			
-			//Set touchBlock = true
-			touchBlock = true;	
 		}
-	}
-  }
+	}	
 };
