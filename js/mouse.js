@@ -48,6 +48,8 @@ Mouse.prototype = {
 
   die: function() {
     this.lives--;
+	$('#lives').html(this.lives);
+	
     console.log("Mouse died. Number of lives left: " + this.lives);
     if (this.lives <= 0) {
       this.emitEvent("gameOver");
