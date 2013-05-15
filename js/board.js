@@ -9,37 +9,36 @@ var Board = function Board(rows, columns, game) {
 
 Board.prototype = {
 	constructor: Board,
-	
+
 	draw: function() {
 		var self = this;
 		var newBoard = "";
 
 		// Define DOM grid
 		for (var i = self.rows-1; i >= 0; i--) {
-			newBoard += "<div class=\"row\" id=\"row"+i+"\">";
+			newBoard += "<div class='row 'id='row"+i+"'>";
 			for (var j = 0; j <= self.columns-1; j++) {
-				newBoard+="<div class=\"cell\" id=\"c"+j+"r"+i+"\"><img id=\"img-c"+j+"r"+i+"\" src=\"img/blank.png\" /></div>";
+				var id = "c"+j+"r"+i;
+				newBoard+="<div class='cell' id='"+id+"'><img id='img-"+id+"' src='img/blank.png' /></div>";
 			}
 			newBoard += "</div>";
 		}
-
+		
 		// Define logical grid
 		for (var i = 0; i <= self.columns-1; i++) {
 			self.squares[i] = [];
-	
 			for (var j = self.rows-1; j >= 0; j--) {
 				self.squares[i][j] = null;
 			}
-
 			newBoard+="</div>";
 		}
 
 		$("#board").html(newBoard);
 	},
-	
+
 	testSquare: function(x,y){
 		var self = this;
-		if(x >0 && x < self.columns && y >0 && y < self.rows){return true;}
+		if(x >= 0 && x < self.columns && y >= 0 && y < self.rows){return true;}
 		return false;
 	},
 
@@ -47,14 +46,10 @@ Board.prototype = {
 		var self = this;
 		var x = entity.x;
 		var y = entity.y;
-		// Grrr. These two commands refuse to co-exist in the same function.
-	$("#c" + x + "r" + y)
-			.find("img").remove()                      // remove blank.png
-		if(self.testSquare(x, y)){
-		self.squares[x][y] = entity;
-		
-		$("#c" + x + "r" + y)
-			.prepend("<img id=\"img-c" + x + "r" + y  + "\" src=\"img/" + entity.symbol + "\" />");
+		var id = "c" + x + "r" + y;
+		if(self.testSquare(x, y)){		
+		$("#"+id)
+			.html("<img id='img-"+id+"' src='img/" + entity.symbol + "' />");
 		self.squares[x][y] = entity;
 		}else{
 			return false;
@@ -63,14 +58,12 @@ Board.prototype = {
 
 	remove: function(x, y) {
 		var self = this;
-
 		$("#c" + x + "r" + y)
 			.find("img").remove();
 		self.squares[x][y] = null;
 		$("#c" + x + "r" + y)
 			.prepend("<img id=\"img-c" + x + "r" + y  + "\" src=\"img/blank.png\" />");
 		self.squares[x][y] = null;
-
 	},
 
 	getSquare: function(x, y, direction) {
@@ -174,4 +167,3 @@ Board.prototype = {
 		}
 	}
 };
-
